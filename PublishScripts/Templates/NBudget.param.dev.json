@@ -1,0 +1,32 @@
+{
+  "siteName": {
+    "value": "nbudget"
+  },
+  "hostingPlanName": {
+    "value": "nbplan"
+  },
+  "siteLocation": {
+    "value": "West Europe"
+  },
+  "sku": {
+    "value": "Free"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "serverName": {
+    "value": "nbdb"
+  },
+  "serverLocation": {
+    "value": "West Europe"
+  },
+  "administratorLogin": {
+    "value": "nbuser"
+  },
+  "administratorLoginPassword": {
+    "value": "Rozi0721"
+  },
+  "databaseName": {
+    "value": "nbudget_db"
+  }
+}
