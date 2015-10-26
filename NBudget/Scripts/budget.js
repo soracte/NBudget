@@ -1,16 +1,22 @@
-﻿function mainVm() {
+﻿function Transaction(date, amount, reason) {
+    this.date = ko.observable(date);
+    this.amount = ko.observable(amount);
+    this.reason = ko.observable(reason);
+}
+
+function mainVm() {
     var self = this;
     this.myData = ko.observableArray([]);
 
     this.gridOptions = {
         data: self.myData,
-        columnDefs: [{ field: 'Date', displayName: 'Dátum', sortable: true, direction: 'asc' },
-                     { field: 'Amount', displayName: 'Összeg', sortable: false },
-                     { field: 'Reason', displayName: 'Megnevezés', sortable: false }],
-        sortInfo: {
-            column: 'Date', //any column name
-            direction: 'asc' // values can be 'asc' or 'desc'
-        }
+        columnDefs: [{ field: 'date', displayName: 'Dátum', sortable: true, direction: 'asc' },
+                     { field: 'amount', displayName: 'Összeg', sortable: false },
+                     { field: 'reason', displayName: 'Megnevezés', sortable: false }],
+        sortInfo: ko.observable({
+            column: { field: "date" },
+            direction: "asc"
+        })
     };
 
     this.addNewTransaction = function (formElement) {
@@ -18,28 +24,29 @@
         var amountText = $(formElement).find("#amount").val();
         var reasonText = $(formElement).find("#reason").val();
 
-        var added = { date: dateText, amount: amountText, reason: reasonText };
-
+        var added = new Transaction(dateText, amountText, reasonText);
 
         $.ajax("/api/Transactions", {
             data: ko.toJSON(added),
             type: "post", contentType: "application/json",
-            success: function (result) { self.myData.push({ Date: dateText, Amount: amountText, Reason: reasonText }); }
+            success: function (result) { self.myData.push({ date: dateText, amount: amountText, reason: reasonText }); }
         });
     };
 
     this.initializeWithData = function (data) {
-        this.myData(data);
+        var transactions = ko.utils.arrayMap(data, function (item) {
+            return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason);
+        });
+
+        this.myData(transactions);
     }
 };
 
 $(function () {
+    ko.validation.init();
     $.getJSON("/api/Transactions", function (data) {
-        var vm = new mainVm();
+        var vm = new mainVm();    
         vm.initializeWithData(data);
-
-        // TODO probably call this after each grid modification and sort on server side
-        
 
         ko.applyBindings(vm);
     });

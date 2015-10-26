@@ -5,13 +5,14 @@
 
 @Scripts.Render("~/bundles/knockout")
 @Scripts.Render("~/bundles/koGrid")
+@Scripts.Render("~/bundles/koValidation")
 @Scripts.Render("~/Scripts/budget.js")
 @Scripts.Render("~/Scripts/moment.js")
 @Scripts.Render("~/Scripts/pikaday.js")
 
 <form class="form-inline" style="margin: 10px;" data-bind="submit: addNewTransaction">
     <div class="form-group">
-        <input type="text" class="form-control" id="datepicker" data-bind="value: $data.date" placeholder="Dátum"/>
+        <input type="text" class="form-control" id="datepicker" data-bind="value: $data.date" required placeholder="Dátum"/>
     </div>
     <div class="form-group">
         <input type="text" class="form-control" id="amount" data-bind="value: $data.amount" placeholder="Összeg"/>

@@ -26,6 +26,9 @@ namespace NBudget
             bundles.Add(new ScriptBundle("~/bundles/koGrid").Include(
                       "~/Scripts/koGrid-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/koValidation").Include(
+                      "~/Scripts/knockout.validation.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
