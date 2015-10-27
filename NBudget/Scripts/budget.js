@@ -6,10 +6,23 @@
 
 function mainVm() {
     var self = this;
-    this.myData = ko.observableArray([]);
+
+    ko.validation.init({
+        decorateInputElement: true,
+        registerExtenders: true,
+        messagesOnModified: true,
+        errorElementClass: 'has-error',
+        errorMessageClass: 'help-block',
+    });
+
+    this.date = ko.observable().extend({ required: true, date: true });
+    this.amount = ko.observable().extend({ required: true, number: true });
+    this.reason = ko.observable().extend({ required: true, maxLength: 20 });
+
+    this.gridData = ko.observableArray([]);
 
     this.gridOptions = {
-        data: self.myData,
+        data: self.gridData,
         columnDefs: [{ field: 'date', displayName: 'Dátum', sortable: true, direction: 'asc' },
                      { field: 'amount', displayName: 'Összeg', sortable: false },
                      { field: 'reason', displayName: 'Megnevezés', sortable: false }],
@@ -20,16 +33,18 @@ function mainVm() {
     };
 
     this.addNewTransaction = function (formElement) {
-        var dateText = $(formElement).find("#datepicker").val();
-        var amountText = $(formElement).find("#amount").val();
-        var reasonText = $(formElement).find("#reason").val();
+        var errors = ko.validation.group([this.date, this.amount, this.reason]);
 
-        var added = new Transaction(dateText, amountText, reasonText);
+        if (errors) {
+            return;
+        }
+
+        var addedTransaction = new Transaction(this.date(), this.amount(), this.reason());
 
         $.ajax("/api/Transactions", {
-            data: ko.toJSON(added),
+            data: ko.toJSON(addedTransaction    ),
             type: "post", contentType: "application/json",
-            success: function (result) { self.myData.push({ date: dateText, amount: amountText, reason: reasonText }); }
+            success: function (result) { self.gridData.push(addedTransaction); }
         });
     };
 
@@ -38,16 +53,17 @@ function mainVm() {
             return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason);
         });
 
-        this.myData(transactions);
-    }
+        this.gridData(transactions);
+    };
 };
 
 $(function () {
-    ko.validation.init();
     $.getJSON("/api/Transactions", function (data) {
         var vm = new mainVm();    
         vm.initializeWithData(data);
 
         ko.applyBindings(vm);
+
+        $("#loadingLabel").hide();
     });
 });
