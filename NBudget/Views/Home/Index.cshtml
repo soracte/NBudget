@@ -20,6 +20,13 @@
     <div class="form-group" data-bind="validationElement: reason">
         <input type="text" class="form-control" id="reason" data-bind="value: reason, valueUpdate: 'blur'" placeholder="Megnevezés"/>
     </div>
+    <div class="form-group">
+        <select class="form-control" data-bind="options: categories,
+                                                optionsText: 'name',
+                                                optionsCaption: 'Válassz...',
+                                                value: category"></select>
+    </div>
+
     <button type="submit" class="btn btn-default">Hozzáadás</button>
 </form>
 <div id="loadingLabel">Adatok betöltése...</div>

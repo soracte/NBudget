@@ -1,7 +1,13 @@
-﻿function Transaction(date, amount, reason) {
+﻿function Transaction(date, amount, reason, categoryId) {
     this.date = ko.observable(date);
     this.amount = ko.observable(amount);
     this.reason = ko.observable(reason);
+    this.category = ko.observable(categoryId);
+}
+
+function Category(id, name) {
+    this.id = ko.observable(id);
+    this.name = ko.observable(name);
 }
 
 function mainVm() {
@@ -13,19 +19,24 @@ function mainVm() {
         messagesOnModified: true,
         errorElementClass: 'has-error',
         errorMessageClass: 'help-block',
-    });
+    });    
 
     this.date = ko.observable().extend({ required: true, date: true });
     this.amount = ko.observable().extend({ required: true, number: true });
     this.reason = ko.observable().extend({ required: true, maxLength: 20 });
 
+    // DATA
+
     this.gridData = ko.observableArray([]);
+    this.categories = ko.observableArray();
+    this.category = ko.observable();
 
     this.gridOptions = {
         data: self.gridData,
         columnDefs: [{ field: 'date', displayName: 'Dátum', sortable: true, direction: 'asc' },
                      { field: 'amount', displayName: 'Összeg', sortable: false },
-                     { field: 'reason', displayName: 'Megnevezés', sortable: false }],
+                     { field: 'reason', displayName: 'Megnevezés', sortable: false },
+                     { field: 'category', displayName: 'Kategória', sortable: false }],
         sortInfo: ko.observable({
             column: { field: "date" },
             direction: "asc"
@@ -35,35 +46,47 @@ function mainVm() {
     this.addNewTransaction = function (formElement) {
         var errors = ko.validation.group([this.date, this.amount, this.reason]);
 
-        if (errors) {
+        if (errors && errors.length > 0) {
             return;
         }
 
-        var addedTransaction = new Transaction(this.date(), this.amount(), this.reason());
+        var addedTransaction = new Transaction(this.date(), this.amount(), this.reason(), this.category().id());
 
         $.ajax("/api/Transactions", {
-            data: ko.toJSON(addedTransaction    ),
+            data: ko.toJSON(addedTransaction),
             type: "post", contentType: "application/json",
             success: function (result) { self.gridData.push(addedTransaction); }
         });
     };
 
-    this.initializeWithData = function (data) {
+    this.initializeWithData = function (data, categoryData) {
+        var categories = ko.utils.arrayMap(categoryData, function (item) {
+            return new Category(item.Id, item.Name);
+        });
+
+        this.categories(categories);
+
         var transactions = ko.utils.arrayMap(data, function (item) {
-            return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason);
+            return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason, item.Category);
         });
 
         this.gridData(transactions);
+
+        
     };
 };
 
 $(function () {
-    $.getJSON("/api/Transactions", function (data) {
-        var vm = new mainVm();    
-        vm.initializeWithData(data);
+    var categories = [];
 
-        ko.applyBindings(vm);
+    $.getJSON("/api/Categories", function (categoryData) {       
+        $.getJSON("/api/Transactions", function (data) {
+            var vm = new mainVm();    
+            vm.initializeWithData(data, categoryData);
 
-        $("#loadingLabel").hide();
+            ko.applyBindings(vm);
+
+            $("#loadingLabel").hide();
+        });
     });
 });

@@ -5,14 +5,11 @@ using System.Web;
 
 namespace NBudget.Models
 {
-    public class Transaction
+    public class TransactionDTO
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
         public int Amount { get; set; }
         public string Reason { get; set; }
-        
-        public virtual Category Category { get; set; }
-
+        public int Category { get; set; }
     }
 }

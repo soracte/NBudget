@@ -20,5 +20,7 @@ namespace NBudget.Models
         }
 
         public System.Data.Entity.DbSet<NBudget.Models.Transaction> Transactions { get; set; }
+
+        public System.Data.Entity.DbSet<NBudget.Models.Category> Categories { get; set; }
     }
 }

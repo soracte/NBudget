@@ -17,9 +17,16 @@ namespace NBudget.Controllers
         private NBudgetContext db = new NBudgetContext();
 
         // GET: api/Transactions
-        public IQueryable<Transaction> GetTransactions()
+        public IHttpActionResult GetTransactions()
         {
-            return db.Transactions;
+            return Ok(db.Transactions.Select(t => 
+            new
+            {
+                Date = t.Date,
+                Amount = t.Amount,
+                Reason = t.Reason,
+                Category = t.Category.Id
+            }));
         }
 
         // GET: api/Transactions/5
@@ -72,17 +79,27 @@ namespace NBudget.Controllers
 
         // POST: api/Transactions
         [ResponseType(typeof(Transaction))]
-        public IHttpActionResult PostTransaction(Transaction transaction)
+        public IHttpActionResult PostTransaction(TransactionDTO transaction)
         {
+            Category category = db.Categories.Single(c => c.Id == transaction.Category);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Transactions.Add(transaction);
-            db.SaveChanges();
+            Transaction addedTransaction = new Transaction
+            {
+                Date = transaction.Date,
+                Amount = transaction.Amount,
+                Category = category,
+                Reason = transaction.Reason
+            };
 
-            return CreatedAtRoute("DefaultApi", new { id = transaction.Id }, transaction);
+            db.Transactions.Add(addedTransaction);
+            db.SaveChanges();
+            
+            return CreatedAtRoute("DefaultApi", new { id = addedTransaction.Id }, transaction);
         }
 
         // DELETE: api/Transactions/5
