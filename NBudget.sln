@@ -36,6 +36,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "NBudgetFrontend", "..\..\..
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "56015"
+		SlnRelativePath = "..\..\..\pages\NBudgetFrontend\"
 	EndProjectSection
 EndProject
 Global
