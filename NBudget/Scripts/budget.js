@@ -40,14 +40,16 @@ function mainVm() {
         sortInfo: ko.observable({
             column: { field: "date" },
             direction: "asc"
-        })
+        }),
+        displaySelectionCheckbox: false,
     };
 
     this.addNewTransaction = function (formElement) {
-        var errors = ko.validation.group([this.date, this.amount, this.reason]);
+        var errors = ko.validation.group(self, { deep: true });
 
-        if (errors && errors.length > 0) {
-            return;
+        if (errors().length > 0) {
+            errors.showAllMessages(true);
+            return false;
         }
 
         var addedTransaction = new Transaction(this.date(), this.amount(), this.reason(), this.category().id());
@@ -67,7 +69,8 @@ function mainVm() {
         this.categories(categories);
 
         var transactions = ko.utils.arrayMap(data, function (item) {
-            return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason, item.Category);
+            var categoryName = ko.utils.arrayFirst(categoryData, function (cat) { return cat.Id == item.Category; }).Name;
+            return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason, categoryName);
         });
 
         this.gridData(transactions);
