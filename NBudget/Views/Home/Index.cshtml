@@ -20,16 +20,20 @@
     <div class="form-group" data-bind="validationElement: reason">
         <input type="text" class="form-control" id="reason" data-bind="value: reason, valueUpdate: 'blur'" placeholder="Megnevezés"/>
     </div>
-    <div class="form-group">
+    <div class="form-group" data-bind="validationElement: amount">
         <select class="form-control" data-bind="options: categories,
                                                 optionsText: 'name',
                                                 optionsCaption: 'Válassz...',
-                                                value: category"></select>
+                                                value: category,
+    validationElement: category"></select>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="filterText" data-bind="value: filterText" placeholder="Filter" />
     </div>
 
     <button type="submit" class="btn btn-default">Hozzáadás</button>
 </form>
-<div id="loadingLabel">Adatok betöltése...</div>
+<div id="loadingLabel" data-bind="visible: loading">Adatok betöltése...</div>
 <div class="gridStyle" data-bind="koGrid: gridOptions" id="budgetGrid">
 </div>
 

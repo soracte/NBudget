@@ -24,12 +24,29 @@ function mainVm() {
     this.date = ko.observable().extend({ required: true, date: true });
     this.amount = ko.observable().extend({ required: true, number: true });
     this.reason = ko.observable().extend({ required: true, maxLength: 20 });
+    this.category = ko.observable().extend({ required: true });
+    this.filterText = ko.observable();
+
+    this.loading = false;
+    this.filter = ko.observable();
 
     // DATA
+    this.transactions = ko.observableArray();
 
-    this.gridData = ko.observableArray([]);
+    this.tempGridData = ko.observableArray();
+
+    this.gridData = ko.pureComputed({
+        read: function () {
+            if (!self.filter()) {
+                return self.transactions();
+            }
+        },
+        write: function (data) {
+            tempGridData = data;
+        },
+        owner: this
+    });
     this.categories = ko.observableArray();
-    this.category = ko.observable();
 
     this.gridOptions = {
         data: self.gridData,
@@ -57,11 +74,13 @@ function mainVm() {
         $.ajax("/api/Transactions", {
             data: ko.toJSON(addedTransaction),
             type: "post", contentType: "application/json",
-            success: function (result) { self.gridData.push(addedTransaction); }
+            success: function (result) {
+                reloadGrid();
+            }
         });
     };
 
-    this.initializeWithData = function (data, categoryData) {
+    this.fillWithData = function (data, categoryData) {
         var categories = ko.utils.arrayMap(categoryData, function (item) {
             return new Category(item.Id, item.Name);
         });
@@ -73,23 +92,27 @@ function mainVm() {
             return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason, categoryName);
         });
 
-        this.gridData(transactions);
+        this.transactions(transactions);
 
         
     };
 };
 
-$(function () {
+var vm = new mainVm();
+
+function reloadGrid() {
     var categories = [];
 
-    $.getJSON("/api/Categories", function (categoryData) {       
+    loading = true;
+    $.getJSON("/api/Categories", function (categoryData) {
         $.getJSON("/api/Transactions", function (data) {
-            var vm = new mainVm();    
-            vm.initializeWithData(data, categoryData);
-
-            ko.applyBindings(vm);
-
-            $("#loadingLabel").hide();
+            vm.fillWithData(data, categoryData);
+            loading = false;
         });
     });
+}
+
+$(function () {
+    reloadGrid();
+    ko.applyBindings(vm);
 });
