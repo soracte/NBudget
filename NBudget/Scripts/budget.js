@@ -13,6 +13,7 @@ function Category(id, name) {
 function mainVm() {
     var self = this;
 
+    // KO config
     ko.validation.init({
         decorateInputElement: true,
         registerExtenders: true,
@@ -21,33 +22,20 @@ function mainVm() {
         errorMessageClass: 'help-block',
     });    
 
+    // Input view model
     this.date = ko.observable().extend({ required: true, date: true });
     this.amount = ko.observable().extend({ required: true, number: true });
     this.reason = ko.observable().extend({ required: true, maxLength: 20 });
     this.category = ko.observable().extend({ required: true });
-    this.filterText = ko.observable();
 
+    // Loading state
     this.loading = false;
-    this.filter = ko.observable();
 
-    // DATA
-    this.transactions = ko.observableArray();
-
-    this.tempGridData = ko.observableArray();
-
-    this.gridData = ko.pureComputed({
-        read: function () {
-            if (!self.filter()) {
-                return self.transactions();
-            }
-        },
-        write: function (data) {
-            tempGridData = data;
-        },
-        owner: this
-    });
+    // Grid data
+    this.gridData = ko.observableArray();
     this.categories = ko.observableArray();
 
+    // Grid config
     this.gridOptions = {
         data: self.gridData,
         columnDefs: [{ field: 'date', displayName: 'Dátum', sortable: true, direction: 'asc' },
@@ -76,6 +64,7 @@ function mainVm() {
             type: "post", contentType: "application/json",
             success: function (result) {
                 reloadGrid();
+                resetVm();
             }
         });
     };
@@ -92,7 +81,7 @@ function mainVm() {
             return new Transaction(moment(item.Date).format('YYYY-MM-DD'), item.Amount, item.Reason, categoryName);
         });
 
-        this.transactions(transactions);
+        this.gridData(transactions);
 
         
     };
@@ -110,6 +99,13 @@ function reloadGrid() {
             loading = false;
         });
     });
+}
+
+function resetVm() {
+    vm.date(undefined);
+    vm.amount(undefined);
+    vm.reason(undefined);
+    vm.category(undefined);
 }
 
 $(function () {

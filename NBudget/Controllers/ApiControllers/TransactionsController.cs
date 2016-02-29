@@ -26,6 +26,23 @@ namespace NBudget.Controllers
             }));
         }
 
+        // GET: api/Transactions?category=5
+        public IHttpActionResult GetTransactionsByCategory(int category)
+        {
+            Category cat = db.Categories.Find(category);
+
+            return Ok(db.Transactions
+                .Where(t => t.Category.Id == category)
+                .Select(t =>
+            new
+            {
+                Date = t.Date,
+                Amount = t.Amount,
+                Reason = t.Reason,
+                Category = t.Category.Id
+            }));
+        }
+
         // GET: api/Transactions/5
         [ResponseType(typeof(Transaction))]
         public IHttpActionResult GetTransaction(int id)
