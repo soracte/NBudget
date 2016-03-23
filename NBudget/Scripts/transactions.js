@@ -35,6 +35,14 @@ function mainVm() {
     this.gridData = ko.observableArray();
     this.categories = ko.observableArray();
 
+    // Modal
+    this.isModelValid = ko.computed(function () {
+        return ko.validation.group(self, { deep: true })().length == 0;
+    });
+
+    // Filter
+    this.checkedCategories = ko.observableArray();
+
     // Grid config
     this.gridOptions = {
         data: self.gridData,
@@ -61,13 +69,20 @@ function mainVm() {
 
         $.ajax("/api/Transactions", {
             data: ko.toJSON(addedTransaction),
-            type: "post", contentType: "application/json",
+            type: "post",
+            contentType: "application/json",
             success: function (result) {
                 reloadGrid();
                 resetVm();
+                $('#newTransactionModal').modal('hide');
             }
         });
     };
+
+    this.filterByCategories = function () {
+        reloadGrid();
+        return true;
+    }
 
     this.fillWithData = function (data, categoryData) {
         var categories = ko.utils.arrayMap(categoryData, function (item) {
@@ -94,7 +109,8 @@ function reloadGrid() {
 
     loading = true;
     $.getJSON("/api/Categories", function (categoryData) {
-        $.getJSON("/api/Transactions", function (data) {
+        var path = "/api/Transactions" + ('?' + $.param({ catid: vm.checkedCategories() }, true) || '');
+        $.getJSON(path, function (data) {
             vm.fillWithData(data, categoryData);
             loading = false;
         });

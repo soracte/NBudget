@@ -13,19 +13,6 @@ namespace NBudget.Controllers
     {
         private NBudgetContext db = new NBudgetContext();
 
-        // GET: api/Transactions
-        public IHttpActionResult GetTransactions()
-        {
-            return Ok(db.Transactions.Select(t => 
-            new
-            {
-                Date = t.Date,
-                Amount = t.Amount,
-                Reason = t.Reason,
-                Category = t.Category.Id
-            }));
-        }
-
         // GET: api/Transactions?category=5
         public IHttpActionResult GetTransactionsByCategory(int category)
         {
@@ -35,6 +22,20 @@ namespace NBudget.Controllers
                 .Where(t => t.Category.Id == category)
                 .Select(t =>
             new
+            {
+                Date = t.Date,
+                Amount = t.Amount,
+                Reason = t.Reason,
+                Category = t.Category.Id
+            }));
+        }
+
+        public IHttpActionResult GetTransactionsByCategory([FromUri] int[] catid = null)
+        {
+            return Ok(db.Transactions
+                .Where(t => catid.Count() == 0 || catid.Contains(t.Category.Id))
+                .Select(t =>
+            new 
             {
                 Date = t.Date,
                 Amount = t.Amount,
