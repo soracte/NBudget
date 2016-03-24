@@ -24,12 +24,14 @@ namespace NBudget.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public AccountController()
         {
         }
 
         public AccountController(ApplicationUserManager userManager,
+            ApplicationRoleManager roleManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             UserManager = userManager;
@@ -45,6 +47,18 @@ namespace NBudget.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? Request.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+            private set
+            {   
+                _roleManager = value;
             }
         }
 
