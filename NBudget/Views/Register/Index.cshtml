@@ -1,0 +1,22 @@
+﻿@Styles.Render("~/Content/KoGridCss")
+@Styles.Render("~/Content/budget.css")
+
+@Scripts.Render("~/bundles/knockout")
+@Scripts.Render("~/Scripts/login.js")
+<form class="form" style="margin: 10px;" data-bind="visible: viewState() === 'signup', submit: register">
+    <h1>Register</h1>
+    <div class="form-group">
+        <input type="text" class="form-control" data-bind="value: email" placeholder="E-mail address" />
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" data-bind="value: password" placeholder="Password" />
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" data-bind="value: confirmPassword" placeholder="Confirm password" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+    <div>Already have an account? @Html.ActionLink("Log in here.", "Index", "Login")
+    </div>
+</form>
