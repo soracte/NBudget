@@ -269,8 +269,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\login.js" />
-    <Content Include="Scripts\transactions.js" />
+    <Content Include="Scripts\nbudget\register.js" />
+    <Content Include="Scripts\nbudget\login.js" />
+    <Content Include="Scripts\nbudget\transactions.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

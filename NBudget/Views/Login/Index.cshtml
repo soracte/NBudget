@@ -2,8 +2,8 @@
 @Styles.Render("~/Content/budget.css")
 
 @Scripts.Render("~/bundles/knockout")
-@Scripts.Render("~/Scripts/login.js")
-<form class="form" style="margin: 10px;" data-bind="visible: viewState() === 'login', submit: login">
+@Scripts.Render("~/Scripts/nbudget/login.js")
+<form class="form" style="margin: 10px;" data-bind="submit: login">
     <h1>Log in</h1>
     <div class="form-group">
         <input type="text" class="form-control" data-bind="value: email" placeholder="E-mail address" />

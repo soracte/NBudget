@@ -2,11 +2,10 @@
 @Styles.Render("~/Content/budget.css")
 @Styles.Render("~/Content/pikaday.css")
 
-
 @Scripts.Render("~/bundles/knockout")
 @Scripts.Render("~/bundles/koGrid")
 @Scripts.Render("~/bundles/koValidation")
-@Scripts.Render("~/Scripts/transactions.js")
+@Scripts.Render("~/Scripts/nbudget/transactions.js")
 @Scripts.Render("~/Scripts/moment.js")
 @Scripts.Render("~/Scripts/pikaday.js")
 
@@ -40,13 +39,13 @@
                 <div class="modal-body">
 
                     <div class="form-group" data-bind="validationElement: date">
-                        <input type="text" class="form-control" id="datepicker" data-bind="value: date, valueUpdate: 'blur'" placeholder="Dátum" />
+                        <input type="text" class="form-control" id="datepicker" data-bind="textInput: date, valueUpdate: 'blur'" placeholder="Dátum" />
                     </div>
                     <div class="form-group" data-bind="validationElement: amount">
-                        <input type="text" class="form-control" id="amount" data-bind="value: amount, valueUpdate: 'blur'" placeholder="Összeg" />
+                        <input type="text" class="form-control" id="amount" data-bind="textInput: amount, valueUpdate: 'blur'" placeholder="Összeg" />
                     </div>
                     <div class="form-group" data-bind="validationElement: reason">
-                        <input type="text" class="form-control" id="reason" data-bind="value: reason, valueUpdate: 'blur'" placeholder="Megnevezés" />
+                        <input type="text" class="form-control" id="reason" data-bind="textInput: reason, valueUpdate: 'blur'" placeholder="Megnevezés" />
                     </div>
                     <div class="form-group" data-bind="validationElement: category">
                         <select class="form-control" data-bind="options: categories,
