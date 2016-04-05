@@ -10,7 +10,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/knockout")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">$(function () { ko.applyBindings({}); })</script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -23,14 +25,15 @@
                 </button>
                 @Html.ActionLink("NBudget", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse" data-bind="visible: false">
                 <ul class="nav navbar-nav">\
-                    <li>@Html.ActionLink("Category Management", "Index", "CategoryManagement", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Transaction List", "Index", "TransactionList")</li>
+                    <li>@Html.ActionLink("Category Management", "Index", "CategoryManagement")</li>
+                    <li>@Html.ActionLink("API", "Index", "Help")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    \
-                    <li>@Html.ActionLink("Login", "Index", "Login", new { area = "" }, null)</li>
+                    <li data-bind="visible: true">@Html.ActionLink("Log in", "Index", "Login")</li>
+                    <li data-bind="visible: false">@Html.ActionLink("Log out", "Index", "Login")</li>
                 </ul>
             </div>
         </div>

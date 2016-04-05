@@ -32,6 +32,7 @@
             )
         .done(function (data) {
             sessionStorage.setItem("token", data['access_token'])
+            return true;
         })
         .fail(function (data) {
             var desc = JSON.parse(data.responseText)['error_description'];
