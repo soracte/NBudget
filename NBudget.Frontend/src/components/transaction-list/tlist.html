@@ -9,7 +9,7 @@
     <div class="form-group" data-bind="foreach: categories">
         <div class="checkbox">
             <label>
-                <input type="checkbox" 
+                <input type="checkbox"
                        data-bind="checkedValue: id, checked: $parent.checkedCategories, click: $root.filterByCategories"><span data-bind="text: name" />
             </label>
         </div>
@@ -22,19 +22,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="myModalLabel">New transaction</h4>
             </div>
             <form class="form" style="margin: 10px;" data-bind="submit: addNewTransaction">
                 <div class="modal-body">
 
                     <div class="form-group" data-bind="validationElement: date">
-                        <input type="text" class="form-control" id="datepicker" data-bind="textInput: date, valueUpdate: 'blur'" placeholder="Dátum" />
+                        <input type="text" class="form-control" id="datepicker" data-bind="textInput: date, valueUpdate: 'blur'" placeholder="Date" />
                     </div>
                     <div class="form-group" data-bind="validationElement: amount">
-                        <input type="text" class="form-control" id="amount" data-bind="textInput: amount, valueUpdate: 'blur'" placeholder="Összeg" />
+                        <input type="text" class="form-control" id="amount" data-bind="textInput: amount, valueUpdate: 'blur'" placeholder="Amount" />
                     </div>
                     <div class="form-group" data-bind="validationElement: reason">
-                        <input type="text" class="form-control" id="reason" data-bind="textInput: reason, valueUpdate: 'blur'" placeholder="Megnevezés" />
+                        <input type="text" class="form-control" id="reason" data-bind="textInput: reason, valueUpdate: 'blur'" placeholder="Reason" />
                     </div>
                     <div class="form-group" data-bind="validationElement: category">
                         <select class="form-control" data-bind="options: categories,
@@ -55,12 +55,21 @@
 
 
 <div id="loadingLabel" data-bind="visible: loading">Loading data...</div>
-<div class="gridStyle" data-bind="koGrid: gridOptions" id="budgetGrid">
-</div>
-<script>
-    var picker = new Pikaday({
-        field: document.getElementById("datepicker"),
-        firstDay: 1,
-        format: 'YYYY-MM-DD'
-    });
-    </script>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: gridData">
+        <tr>
+            <td data-bind="text: date"></td>
+            <td data-bind="text: amount"></td>
+            <td data-bind="text: reason"></td>
+            <td data-bind="text: category"></td>
+        </tr>
+    </tbody>
+</table>

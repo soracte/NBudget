@@ -6,6 +6,8 @@ var require = {
         "crossroads":           "bower_modules/crossroads/dist/crossroads.min",
         "hasher":               "bower_modules/hasher/dist/js/hasher.min",
         "jquery":               "bower_modules/jquery/dist/jquery",
+        "moment":               "bower_modules/moment/moment",
+        "pikaday":              "bower_modules/pikaday/pikaday",
         "knockout":             "bower_modules/knockout/dist/knockout",
         "knockout-validation":  "bower_modules/knockout-validation/dist/knockout.validation",
         "knockout-projections": "bower_modules/knockout-projections/dist/knockout-projections",

@@ -1,13 +1,10 @@
 import ko from 'knockout';
 import homeTemplate from 'text!./home.html';
+import Pikaday from 'pikaday';
 
 class HomeViewModel {
     constructor(route) {
-        this.message = ko.observable('Welcome to NBudget!');
-    }
-    
-    doSomething() {
-        this.message('You invoked doSomething() on the viewmodel.');
+        this.message = ko.observable('Welcome to NBudget.');
     }
 }
 

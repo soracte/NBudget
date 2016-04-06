@@ -10,7 +10,9 @@
     "requirejs-text": "~2.0.10",
     "knockout": "~3.3.0-alpha",
     "knockout-projections": "~1.1.0",
-    "knockout-validation": "^2.0.3"
+    "knockout-validation": "^2.0.3",
+    "moment": "^2.12.0",
+    "pikaday": "^1.4.0"
   },
   "resolutions": {
     "knockout": "~3.3.0-alpha"

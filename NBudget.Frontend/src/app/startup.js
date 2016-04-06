@@ -8,6 +8,7 @@ import * as router from './router';
 ko.components.register('nav-bar', { require: 'components/nav-bar/nav-bar' });
 ko.components.register('home-page', { require: 'components/home-page/home' });
 ko.components.register('transaction-list', { require: 'components/transaction-list/tlist' });
+ko.components.register('login-page', { require: 'components/login-page/login' });
 
 // ... or for template-only components, you can just point to a .html file directly:
 ko.components.register('about-page', {

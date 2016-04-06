@@ -35,7 +35,8 @@ var routerInstance = new Router({
     routes: [
         { url: '',          params: { page: 'home-page' } },
         { url: 'about',     params: { page: 'about-page' } },
-        { url: 'tlist',     params: { page: 'transaction-list' } }
+        { url: 'tlist',     params: { page: 'transaction-list' } },
+        { url: 'login',     params: { page: 'login-page' } }
     ]
 });
 
