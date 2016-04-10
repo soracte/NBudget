@@ -9,8 +9,6 @@ using System.Web.Http.Cors;
 
 namespace NBudget.Controllers
 {
-
-    [EnableCors(origins: "http://localhost:8080", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
         private NBudgetContext db = new NBudgetContext();

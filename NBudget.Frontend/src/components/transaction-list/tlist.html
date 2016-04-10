@@ -10,7 +10,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox"
-                       data-bind="checkedValue: id, checked: $parent.checkedCategories, click: $root.filterByCategories"><span data-bind="text: name" />
+                       data-bind="checkedValue: id, checked: $parent.checkedCategories, click: $parent.filterByCategories.bind($component)"><span data-bind="text: name" />
             </label>
         </div>
     </div>

@@ -100,7 +100,7 @@ class TransactionListViewModel {
     }
 
     filterByCategories() {
-        reloadGrid();
+        this.reloadGrid();
         return true;
     }
     

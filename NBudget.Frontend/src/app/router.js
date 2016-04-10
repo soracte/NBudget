@@ -1,6 +1,7 @@
 import ko from 'knockout';
 import crossroads from 'crossroads';
 import hasher from 'hasher';
+import auth from './auth';
 
 // This module configures crossroads.js, a routing library. If you prefer, you
 // can use any other routing library (or none at all) as Knockout is designed to
@@ -14,14 +15,16 @@ import hasher from 'hasher';
 class Router {
     constructor(config) {
         this.currentRoute = ko.observable({});
+        this.authenticated = auth.authenticated;
     
         // Configure Crossroads route handlers
         ko.utils.arrayForEach(config.routes, (route) => {
             crossroads.addRoute(route.url, (requestParams) => {
-                this.currentRoute(ko.utils.extend(requestParams, route.params));
+                console.log('nothing');
+//                this.currentRoute(ko.utils.extend(requestParams, route.params));
             });
         });
-    
+
         // Activate Crossroads
         crossroads.normalizeFn = crossroads.NORM_AS_OBJECT;
         hasher.initialized.add(hash => crossroads.parse(hash));
@@ -36,7 +39,7 @@ var routerInstance = new Router({
         { url: '',          params: { page: 'home-page' } },
         { url: 'about',     params: { page: 'about-page' } },
         { url: 'tlist',     params: { page: 'transaction-list' } },
-        { url: 'login',     params: { page: 'login-page' } }
+        { url: 'login',     params: { page: 'login-page'  } }
     ]
 });
 

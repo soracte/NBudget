@@ -23,11 +23,11 @@ attributes on the <li> elements.
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li data-bind="css: { active: route().page === 'login-page' }">
+                <li data-bind="visible: !$root.authenticated(), css: { active: route().page === 'login-page' }">
                     <a href="#login">Log in</a>
                 </li>
-                <li data-bind="css: { active: route().page === 'transaction-list' }">
-                    <a href="#logout">Log out</a>
+                <li data-bind="visible: $root.authenticated(), css: { active: route().page === 'transaction-list' }">
+                    <a href="#" data-bind="click: (data, event) => logout($root.authenticated, data, event)">Log out</a>
                 </li>
             </ul>
 
