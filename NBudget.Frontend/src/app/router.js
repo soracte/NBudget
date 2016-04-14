@@ -14,14 +14,15 @@ import auth from './auth';
 
 class Router {
     constructor(config) {
-        this.currentRoute = ko.observable({});
+        this.currentRoute = ko.observable();
         this.authenticated = auth.authenticated;
     
         // Configure Crossroads route handlers
         ko.utils.arrayForEach(config.routes, (route) => {
             crossroads.addRoute(route.url, (requestParams) => {
-                console.log('nothing');
-//                this.currentRoute(ko.utils.extend(requestParams, route.params));
+                //if (this.authenticated() || !this.currentRoute()) {
+                    this.currentRoute(ko.utils.extend(requestParams, route.params));
+                //}
             });
         });
 

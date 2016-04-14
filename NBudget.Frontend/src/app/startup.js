@@ -1,8 +1,8 @@
 import 'jquery';
 import 'bootstrap';
 import ko from 'knockout';
-import 'knockout-projections'
-import app from './app'
+import 'knockout-projections';
+import app from './app';
 
 // Components can be packaged as AMD modules, such as the following:
 ko.components.register('nav-bar', { require: 'components/nav-bar/nav-bar' });

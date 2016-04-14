@@ -18,21 +18,18 @@ attributes on the <li> elements.
 
         <ul class="nav navbar-nav">
             <li data-bind="css: { active: route().page === 'transaction-list' }">
-                    <a href="#tlist">Transaction list</a>
+                    <a href="#tlist" data-bind="visible: authenticated()">Transaction list</a>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li data-bind="visible: !$root.authenticated(), css: { active: route().page === 'login-page' }">
+                <li data-bind="visible: !authenticated(), css: { active: route().page === 'login-page' }">
                     <a href="#login">Log in</a>
                 </li>
-                <li data-bind="visible: $root.authenticated(), css: { active: route().page === 'transaction-list' }">
-                    <a href="#" data-bind="click: (data, event) => logout($root.authenticated, data, event)">Log out</a>
+                <li data-bind="visible: authenticated(), css: { active: route().page === 'transaction-list' }">
+                    <a href="#" data-bind="click: (data, event) => logout(data, event)">Log out</a>
                 </li>
             </ul>
-
-
-
         </div>
     </div>
 </div>

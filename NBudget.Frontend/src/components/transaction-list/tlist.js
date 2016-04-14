@@ -47,7 +47,7 @@ class TransactionListViewModel {
         this.categories = ko.observableArray();
 
         // Modal
-        this.isModelValid = ko.computed(() => ko.validation.group(this, { deep: true })().length == 0);
+        this.isModelValid = ko.computed(() => ko.validation.group(this, { deep: true })().length === 0);
 
         // Filter
         this.checkedCategories = ko.observableArray();
@@ -84,7 +84,7 @@ class TransactionListViewModel {
                 $('#newTransactionModal').modal('hide');
             }
         });
-    };
+    }
 
     reloadGrid() {
         var categories = [];
@@ -114,7 +114,7 @@ class TransactionListViewModel {
         });
 
         this.gridData(transactions);
-    };
+    }
 
     resetVm() {
         this.date(undefined);

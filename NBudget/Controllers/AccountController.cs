@@ -71,9 +71,13 @@ namespace NBudget.Controllers
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
+            ApplicationUser appUser = UserManager.FindById(User.Identity.GetUserId());
+
             return new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
@@ -341,7 +345,7 @@ namespace NBudget.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

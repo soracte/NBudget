@@ -1,19 +1,16 @@
 namespace NBudget.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<NBudget.Models.NBudgetContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<NBudget.Models.ApplicationDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            ContextKey = "NBudget.Models.NBudgetContext";
+            AutomaticMigrationsEnabled = false;
+            ContextKey = "NBudget.Models.ApplicationDbContext";
         }
 
-        protected override void Seed(NBudget.Models.NBudgetContext context)
+        protected override void Seed(NBudget.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

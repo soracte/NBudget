@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NBudget.Models
 {
@@ -28,6 +27,10 @@ namespace NBudget.Models
     public class UserInfoViewModel
     {
         public string Email { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public bool HasRegistered { get; set; }
 

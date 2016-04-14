@@ -1,10 +1,11 @@
 import ko from 'knockout';
 import homeTemplate from 'text!./home.html';
 import Pikaday from 'pikaday';
+import auth from 'app/auth';
 
 class HomeViewModel {
     constructor(route) {
-        this.message = ko.observable('Welcome to NBudget.');
+        this.message = ko.computed(() => auth.authenticated() ? 'Welcome back, ' + auth.principal().fname + '.' : 'Welcome to NBudget.' );
     }
 }
 
