@@ -7,10 +7,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using NBudget.Models;
 using Microsoft.AspNet.Identity;
+using NBudget.Controllers.ApiControllers;
 
 namespace NBudget.Controllers
 {
-    public class TransactionsController : ApiController
+    public class TransactionsController : BaseApiController
     {
         private NBudgetContext db = new NBudgetContext();
 

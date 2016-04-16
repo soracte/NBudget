@@ -6,13 +6,21 @@ namespace NBudget.Controllers.ApiControllers
 {
     public class BaseApiController : ApiController
     {
-        private ApplicationRoleManager _roleManager = null;
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
+
+
 
         public ApplicationRoleManager RoleManager
         {
             get
             {
-                return _roleManager ?? Request.GetOwinContext().Get<ApplicationRoleManager>(); 
+                return Request.GetOwinContext().Get<ApplicationRoleManager>();
             }
         }
     }

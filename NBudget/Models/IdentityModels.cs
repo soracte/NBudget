@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace NBudget.Models
 {
@@ -10,6 +11,7 @@ namespace NBudget.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public virtual List<ApplicationUser> Invitees { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {

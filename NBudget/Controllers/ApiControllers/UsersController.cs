@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using NBudget.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,16 +10,8 @@ using System.Web.Http;
 namespace NBudget.Controllers.ApiControllers
 {
     [RoutePrefix("api/Users")]
-    public class UsersController : ApiController
+    public class UsersController : BaseApiController
     {
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-        }
-
         [Route("")]
         public IHttpActionResult GetUsers()
         {
@@ -34,6 +25,41 @@ namespace NBudget.Controllers.ApiControllers
             await UserManager.AddToRolesAsync(id, roles.NewRoles);
             return Ok();
 
+        }
+
+        [Route("SetInvitees")]
+        [HttpPut]
+        public async Task<IHttpActionResult> PutInviteesForCurrentUser([FromBody] UpdateInviteesBindingModel inviteeIds)
+        {
+            ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            List<ApplicationUser> invitees = currentUser.Invitees;
+
+            if (invitees == null)
+            {
+                invitees = new List<ApplicationUser>();
+                currentUser.Invitees = invitees;
+            }
+            else
+            {
+                invitees.Clear();
+            }
+
+            foreach (string inv in inviteeIds.Invitees)
+            {
+                ApplicationUser user = UserManager.FindById(inv);
+                if (user == null)
+                {
+                    return NotFound();
+
+                }
+
+                invitees.Add(user);
+            }
+
+            await UserManager.UpdateAsync(currentUser);
+
+            return Ok();
         }
     }
 }

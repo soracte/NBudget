@@ -6,10 +6,11 @@ using System.Web.Http.Description;
 using NBudget.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NBudget.Controllers.ApiControllers;
 
 namespace NBudget.Controllers
 {
-    public class CategoriesController : ApiController
+    public class CategoriesController : BaseApiController
     {
         private NBudgetContext db = new NBudgetContext();
 

@@ -99,9 +99,4 @@ namespace NBudget.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class UpdateRolesBindingModel
-    {
-        [Required]
-        public string[] NewRoles { get; set; }
-    }
 }
