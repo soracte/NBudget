@@ -5,28 +5,31 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using NBudget.Models;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using NBudget.Controllers.ApiControllers;
 
 namespace NBudget.Controllers
 {
-    public class CategoriesController : BaseApiController
+    [RoutePrefix("api/Categories")]
+    public class CategoriesController : DomainController<Category>
     {
         private NBudgetContext db = new NBudgetContext();
 
         // GET: api/Categories
-        public IHttpActionResult GetCategories()
+        [Route("{userId}")]
+        public IHttpActionResult GetCategories(string userId)
         {
             var currentUserId = User.Identity.GetUserId();
-            var categories = db.Categories.Where(cat => cat.Owner.Id == currentUserId).Select(cat => new { Id = cat.Id, Name = cat.Name });
+
+            var categories = getAccessibleEntities(db.Categories, userId).Select(cat => new { Id = cat.Id, Name = cat.Name });
             return Ok(categories);
         }
 
         // GET: api/Categories/5
         [ResponseType(typeof(Category))]
-        public IHttpActionResult GetCategory(int id)
+        [Route("{userId}/{id}")]
+        public IHttpActionResult GetCategory(string userId, int id)
         {
-            Category category = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
+            Category category = getAccessibleEntities(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -37,14 +40,15 @@ namespace NBudget.Controllers
 
         // PUT: api/Categories/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCategory(int id, CategoryDTO category)
+        [Route("{userId}/{id}")]
+        public IHttpActionResult PutCategory(string userId, int id, CategoryDTO category)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Category updated = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
+            Category updated = getAccessibleEntities(db.Categories).SingleOrDefault(cat => cat.Id == id);
             if (updated == null)
             {
                 return NotFound();
@@ -62,7 +66,8 @@ namespace NBudget.Controllers
 
         // POST: api/Categories
         [ResponseType(typeof(Category))]
-        public IHttpActionResult PostCategory(CategoryDTO category)
+        [Route("{userId}")]
+        public IHttpActionResult PostCategory(string userId, [FromBody] CategoryDTO category)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +75,7 @@ namespace NBudget.Controllers
             }
 
             var currentUserId = User.Identity.GetUserId();
-            IdentityUser currentUser = db.Users.Find(currentUserId);
+            ApplicationUser currentUser = db.Users.Find(currentUserId) as ApplicationUser;
             Category added = new Category { Name = category.Name, Owner = currentUser };
 
             db.Categories.Add(added);
@@ -81,9 +86,10 @@ namespace NBudget.Controllers
 
         // DELETE: api/Categories/5
         [ResponseType(typeof(Category))]
-        public IHttpActionResult DeleteCategory(int id)
+        [Route("{userId}/{id}")]
+        public IHttpActionResult DeleteCategory(string userId, int id)
         {
-            Category category = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
+            Category category = getAccessibleEntities(db.Categories).SingleOrDefault(cat => cat.Id == id);
             if (category == null)
             {
                 return NotFound();

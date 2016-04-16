@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
@@ -16,6 +15,7 @@ using NBudget.Models;
 using NBudget.Providers;
 using NBudget.Results;
 using NBudget.Controllers.ApiControllers;
+using System.Linq;
 
 namespace NBudget.Controllers
 {
@@ -25,7 +25,6 @@ namespace NBudget.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private ApplicationRoleManager _roleManager;
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
@@ -43,6 +42,8 @@ namespace NBudget.Controllers
                 Email = User.Identity.GetUserName(),
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName,
+                Invitees = appUser.Invitees.Select(inv => inv.Id),
+                Inviter = appUser.Inviters.Select(inv => inv.Id),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };

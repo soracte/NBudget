@@ -218,6 +218,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ApiControllers\AccountController.cs" />
+    <Compile Include="Controllers\ApiControllers\DomainController.cs" />
     <Compile Include="Controllers\ApiControllers\BaseApiController.cs" />
     <Compile Include="Controllers\ApiControllers\CategoriesController.cs" />
     <Compile Include="Controllers\ApiControllers\RolesController.cs" />
@@ -252,7 +253,24 @@
     <Compile Include="Migrations\201604161543354_AddInvitees.Designer.cs">
       <DependentUpon>201604161543354_AddInvitees.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604161744516_OwnerToBaseClass.cs" />
+    <Compile Include="Migrations\201604161744516_OwnerToBaseClass.Designer.cs">
+      <DependentUpon>201604161744516_OwnerToBaseClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604161925300_RequiredOwnerAndCategoryName.cs" />
+    <Compile Include="Migrations\201604161925300_RequiredOwnerAndCategoryName.Designer.cs">
+      <DependentUpon>201604161925300_RequiredOwnerAndCategoryName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604162043362_AddInviter.cs" />
+    <Compile Include="Migrations\201604162043362_AddInviter.Designer.cs">
+      <DependentUpon>201604162043362_AddInviter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604162124097_MultipleInviters.cs" />
+    <Compile Include="Migrations\201604162124097_MultipleInviters.Designer.cs">
+      <DependentUpon>201604162124097_MultipleInviters.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\OwnedEntity.cs" />
     <Compile Include="Models\UsersBindingModels.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -372,6 +390,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604161543354_AddInvitees.resx">
       <DependentUpon>201604161543354_AddInvitees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604161744516_OwnerToBaseClass.resx">
+      <DependentUpon>201604161744516_OwnerToBaseClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604161925300_RequiredOwnerAndCategoryName.resx">
+      <DependentUpon>201604161925300_RequiredOwnerAndCategoryName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604162043362_AddInviter.resx">
+      <DependentUpon>201604162043362_AddInviter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604162124097_MultipleInviters.resx">
+      <DependentUpon>201604162124097_MultipleInviters.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NBudget.Models
 {
-    public class Category
+    public class Category : OwnedEntity
     {
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
-        public virtual IdentityUser Owner { get; set; }
     }
 }

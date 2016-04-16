@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using NBudget.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -15,7 +13,18 @@ namespace NBudget.Controllers.ApiControllers
         [Route("")]
         public IHttpActionResult GetUsers()
         {
-            return Ok(UserManager.Users);
+            List<ApplicationUser> users = new List<ApplicationUser>(UserManager.Users.ToList());
+            var retval = users.Select(user => new
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Invitees = user.Invitees.Select(inv => inv.Id),
+                Inviter = user.Inviters.Select(inv => inv.Id)
+            });
+
+            return Ok(retval);
         }
 
         [Route("UpdateRoles/{id}")]
@@ -24,15 +33,51 @@ namespace NBudget.Controllers.ApiControllers
         {
             await UserManager.AddToRolesAsync(id, roles.NewRoles);
             return Ok();
-
         }
 
-        [Route("SetInvitees")]
+        [Route("ModifyInviter/{id}")]
+        public async Task<IHttpActionResult> PutInviters(string id, [FromBody] UpdateInviterBindingModel invModel)
+        {
+            ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            List<ApplicationUser> inviters = currentUser.Inviters;
+
+            if (inviters == null)
+            {
+                inviters = new List<ApplicationUser>();
+                currentUser.Inviters = inviters;
+            }
+            else
+            {
+                inviters.Clear();
+            }
+
+            foreach (string inv in invModel.Inviters)
+            {
+                ApplicationUser inviter = UserManager.FindById(inv);
+                if (inviter == null)
+                {
+                    return NotFound();
+
+                }
+
+                inviters.Add(inviter);
+                inviter.Invitees.Add(currentUser);
+
+                await UserManager.UpdateAsync(inviter);
+            }
+
+            await UserManager.UpdateAsync(currentUser);
+
+            return Ok();
+            
+        }
+        
+
+        [Route("Invitees")]
         [HttpPut]
         public async Task<IHttpActionResult> PutInviteesForCurrentUser([FromBody] UpdateInviteesBindingModel inviteeIds)
         {
             ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
             List<ApplicationUser> invitees = currentUser.Invitees;
 
             if (invitees == null)
@@ -47,19 +92,46 @@ namespace NBudget.Controllers.ApiControllers
 
             foreach (string inv in inviteeIds.Invitees)
             {
-                ApplicationUser user = UserManager.FindById(inv);
-                if (user == null)
+                ApplicationUser invited = UserManager.FindById(inv);
+                if (invited == null)
                 {
                     return NotFound();
 
                 }
 
-                invitees.Add(user);
+                invitees.Add(invited);
+                invited.Inviters.Add(currentUser);
+
+                await UserManager.UpdateAsync(invited);
             }
 
             await UserManager.UpdateAsync(currentUser);
 
             return Ok();
         }
+
+        [Route("Invitees")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteInviteesOfCurrentUser([FromUri] string[] inviteesToDelete)
+        {
+            ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            List<ApplicationUser> currentInvitees = currentUser.Invitees;
+            if (currentInvitees == null)
+            {
+                return Ok();
+            }
+
+            foreach (ApplicationUser invitee in currentInvitees)
+            {
+                invitee.Inviters.RemoveAll(inviter => inviter.Id == currentUser.Id);
+                await UserManager.UpdateAsync(invitee);
+            }
+
+            currentInvitees.RemoveAll(inv => inviteesToDelete.Contains(inv.Id));
+            await UserManager.UpdateAsync(currentUser);
+            return Ok();
+        }
+
+
     }
 }

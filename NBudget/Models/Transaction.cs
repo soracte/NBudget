@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NBudget.Models
 {
-    public class Transaction
+    public class Transaction : OwnedEntity
     {        
         public int Id { get; set; }
 
@@ -20,7 +20,5 @@ namespace NBudget.Models
         [Required]
         public virtual Category Category { get; set; }
 
-        [Required]
-        public virtual ApplicationUser Owner { get; set; } 
     }
 }

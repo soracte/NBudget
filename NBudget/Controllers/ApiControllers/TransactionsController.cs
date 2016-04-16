@@ -11,7 +11,7 @@ using NBudget.Controllers.ApiControllers;
 
 namespace NBudget.Controllers
 {
-    public class TransactionsController : BaseApiController
+    public class TransactionsController : DomainController<Transaction> 
     {
         private NBudgetContext db = new NBudgetContext();
 
@@ -22,8 +22,8 @@ namespace NBudget.Controllers
             Category cat = db.Categories.Find(category);
             var currentUserId = User.Identity.GetUserId();
 
-            return Ok(db.Transactions
-                .Where(t => (t.Category.Id == category && t.Owner.Id == currentUserId))
+            var retval = getAccessibleEntities(db.Transactions)
+                .Where(t => (t.Category.Id == category))
                 .Select(t =>
             new
             {
@@ -31,7 +31,9 @@ namespace NBudget.Controllers
                 Amount = t.Amount,
                 Reason = t.Reason,
                 Category = t.Category.Id
-            }));
+            });
+
+            return Ok(retval);
         }
 
         public IHttpActionResult GetTransactionsByCategory([FromUri] int[] catid = null)

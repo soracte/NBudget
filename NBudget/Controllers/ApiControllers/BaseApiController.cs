@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace NBudget.Controllers.ApiControllers
 {
-    public class BaseApiController : ApiController
+    public class BaseApiController  : ApiController
     {
         public ApplicationUserManager UserManager
         {
@@ -23,5 +23,6 @@ namespace NBudget.Controllers.ApiControllers
                 return Request.GetOwinContext().Get<ApplicationRoleManager>();
             }
         }
+
     }
 }

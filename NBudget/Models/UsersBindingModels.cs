@@ -16,4 +16,10 @@ namespace NBudget.Models
         [Required]
         public string[] Invitees { get; set; }
     }
+
+    public class UpdateInviterBindingModel
+    {
+        [Required]
+        public string[] Inviters { get; set; }
+    }
 }

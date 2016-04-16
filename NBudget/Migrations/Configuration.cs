@@ -1,5 +1,6 @@
 namespace NBudget.Migrations
 {
+    using Models;
     using System.Data.Entity.Migrations;
 
     internal sealed class Configuration : DbMigrationsConfiguration<NBudget.Models.NBudgetContext>

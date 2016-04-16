@@ -32,6 +32,10 @@ namespace NBudget.Models
 
         public string LastName { get; set; }
 
+        public IEnumerable<string> Invitees { get; set; }
+
+        public IEnumerable<string> Inviter { get; set; }
+
         public bool HasRegistered { get; set; }
 
         public string LoginProvider { get; set; }
