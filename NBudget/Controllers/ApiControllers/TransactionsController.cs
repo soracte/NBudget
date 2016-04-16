@@ -6,6 +6,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NBudget.Models;
+using Microsoft.AspNet.Identity;
 
 namespace NBudget.Controllers
 {
@@ -13,13 +14,15 @@ namespace NBudget.Controllers
     {
         private NBudgetContext db = new NBudgetContext();
 
+
         // GET: api/Transactions?category=5
         public IHttpActionResult GetTransactionsByCategory(int category)
         {
             Category cat = db.Categories.Find(category);
+            var currentUserId = User.Identity.GetUserId();
 
             return Ok(db.Transactions
-                .Where(t => t.Category.Id == category)
+                .Where(t => (t.Category.Id == category && t.Owner.Id == currentUserId))
                 .Select(t =>
             new
             {
@@ -35,7 +38,7 @@ namespace NBudget.Controllers
             return Ok(db.Transactions
                 .Where(t => catid.Count() == 0 || catid.Contains(t.Category.Id))
                 .Select(t =>
-            new 
+            new
             {
                 Date = t.Date,
                 Amount = t.Amount,
@@ -108,12 +111,12 @@ namespace NBudget.Controllers
                 Date = transaction.Date,
                 Amount = transaction.Amount,
                 Category = category,
-                Reason = transaction.Reason
+                Reason = transaction.Reason,
             };
 
             db.Transactions.Add(addedTransaction);
             db.SaveChanges();
-            
+
             return CreatedAtRoute("DefaultApi", new { id = addedTransaction.Id }, transaction);
         }
 

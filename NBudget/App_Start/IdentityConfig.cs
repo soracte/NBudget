@@ -17,7 +17,7 @@ namespace NBudget
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<NBudgetContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -50,7 +50,7 @@ namespace NBudget
 
         public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
         {
-            var roleStore = new RoleStore<IdentityRole>(context.Get<ApplicationDbContext>());
+            var roleStore = new RoleStore<IdentityRole>(context.Get<NBudgetContext>());
             return new ApplicationRoleManager(roleStore);
         }
     }

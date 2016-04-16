@@ -15,6 +15,7 @@ using Microsoft.Owin.Security.OAuth;
 using NBudget.Models;
 using NBudget.Providers;
 using NBudget.Results;
+using System.Linq;
 
 namespace NBudget.Controllers
 {
@@ -348,6 +349,7 @@ namespace NBudget.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            await UserManager.AddToRolesAsync(user.Id, new string[] {"USER"});
 
             if (!result.Succeeded)
             {

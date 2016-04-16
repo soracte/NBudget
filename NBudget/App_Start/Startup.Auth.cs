@@ -6,7 +6,6 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using NBudget.Providers;
 using NBudget.Models;
-using Microsoft.Owin.Cors;
 
 namespace NBudget
 {
@@ -20,7 +19,7 @@ namespace NBudget
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context and user manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(NBudgetContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 

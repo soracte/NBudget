@@ -221,6 +221,7 @@
     <Compile Include="Controllers\ApiControllers\BaseApiController.cs" />
     <Compile Include="Controllers\ApiControllers\CategoriesController.cs" />
     <Compile Include="Controllers\ApiControllers\RolesController.cs" />
+    <Compile Include="Controllers\ApiControllers\UsersController.cs" />
     <Compile Include="Controllers\CategoryManagementController.cs" />
     <Compile Include="Controllers\TransactionListController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -235,9 +236,22 @@
     <Compile Include="Migrations\201604131347169_InitialCreate.Designer.cs">
       <DependentUpon>201604131347169_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604151844235_TransactionsCategories.cs" />
+    <Compile Include="Migrations\201604151844235_TransactionsCategories.Designer.cs">
+      <DependentUpon>201604151844235_TransactionsCategories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604151852146_TransactionOwner.cs" />
+    <Compile Include="Migrations\201604151852146_TransactionOwner.Designer.cs">
+      <DependentUpon>201604151852146_TransactionOwner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604152200434_TransactionUserRequired.cs" />
+    <Compile Include="Migrations\201604152200434_TransactionUserRequired.Designer.cs">
+      <DependentUpon>201604152200434_TransactionUserRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CategoryDTO.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\NBudgetContext.cs" />
@@ -341,6 +355,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201604131347169_InitialCreate.resx">
       <DependentUpon>201604131347169_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604151844235_TransactionsCategories.resx">
+      <DependentUpon>201604151844235_TransactionsCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604151852146_TransactionOwner.resx">
+      <DependentUpon>201604151852146_TransactionOwner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604152200434_TransactionUserRequired.resx">
+      <DependentUpon>201604152200434_TransactionUserRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

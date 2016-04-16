@@ -20,5 +20,7 @@ namespace NBudget.Models
         [Required]
         public virtual Category Category { get; set; }
 
+        [Required]
+        public virtual ApplicationUser Owner { get; set; } 
     }
 }

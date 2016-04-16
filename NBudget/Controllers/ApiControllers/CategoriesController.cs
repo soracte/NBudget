@@ -1,10 +1,11 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NBudget.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace NBudget.Controllers
 {
@@ -13,79 +14,75 @@ namespace NBudget.Controllers
         private NBudgetContext db = new NBudgetContext();
 
         // GET: api/Categories
-        public IQueryable<Category> GetCategories()
+        public IHttpActionResult GetCategories()
         {
-            return db.Categories;
+            var currentUserId = User.Identity.GetUserId();
+            var categories = db.Categories.Where(cat => cat.Owner.Id == currentUserId).Select(cat => new { Id = cat.Id, Name = cat.Name });
+            return Ok(categories);
         }
 
         // GET: api/Categories/5
         [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategory(int id)
         {
-            Category category = db.Categories.Find(id);
+            Category category = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
             if (category == null)
             {
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok(new { Id = category.Id, Name = category.Name });
         }
 
         // PUT: api/Categories/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCategory(int id, Category category)
+        public IHttpActionResult PutCategory(int id, CategoryDTO category)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != category.Id)
+            Category updated = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
+            if (updated == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            db.Entry(category).State = EntityState.Modified;
+            updated.Id = id;
+            updated.Name = category.Name;
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            db.Entry(updated).State = EntityState.Modified;
+
+            db.SaveChanges();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Categories
         [ResponseType(typeof(Category))]
-        public IHttpActionResult PostCategory(Category category)
+        public IHttpActionResult PostCategory(CategoryDTO category)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Categories.Add(category);
+            var currentUserId = User.Identity.GetUserId();
+            IdentityUser currentUser = db.Users.Find(currentUserId);
+            Category added = new Category { Name = category.Name, Owner = currentUser };
+
+            db.Categories.Add(added);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = category.Id }, category);
+            return CreatedAtRoute("DefaultApi", new { id = added.Id }, category);
         }
 
         // DELETE: api/Categories/5
         [ResponseType(typeof(Category))]
         public IHttpActionResult DeleteCategory(int id)
         {
-            Category category = db.Categories.Find(id);
+            Category category = db.Categories.Single(cat => cat.Id == id && cat.Owner.Id == User.Identity.GetUserId());
             if (category == null)
             {
                 return NotFound();
@@ -104,11 +101,6 @@ namespace NBudget.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return db.Categories.Count(e => e.Id == id) > 0;
         }
     }
 }
