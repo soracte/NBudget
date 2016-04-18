@@ -6,21 +6,25 @@ using System.Web.Http.Description;
 using NBudget.Models;
 using Microsoft.AspNet.Identity;
 using NBudget.Controllers.ApiControllers;
+using NBudget.Persistence;
+using NBudget.Attributes;
 
 namespace NBudget.Controllers
 {
     [RoutePrefix("api/Categories")]
-    public class CategoriesController : DomainController<Category>
+    public class CategoriesController : BaseApiController 
     {
         private NBudgetContext db = new NBudgetContext();
+        private EntityQuery<Category> cats = new EntityQuery<Category>();
 
         // GET: api/Categories
         [Route("{userId}")]
+        [AnotherUserAuthorize]
         public IHttpActionResult GetCategories(string userId)
         {
             var currentUserId = User.Identity.GetUserId();
 
-            var categories = getAccessibleEntities(db.Categories, userId).Select(cat => new { Id = cat.Id, Name = cat.Name });
+            var categories = cats.EntitiesOfUser(db.Categories, userId).Select(cat => new { Id = cat.Id, Name = cat.Name });
             return Ok(categories);
         }
 
@@ -29,7 +33,7 @@ namespace NBudget.Controllers
         [Route("{userId}/{id}")]
         public IHttpActionResult GetCategory(string userId, int id)
         {
-            Category category = getAccessibleEntities(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);
+            Category category = cats.EntitiesOfUser(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -48,7 +52,7 @@ namespace NBudget.Controllers
                 return BadRequest(ModelState);
             }
 
-            Category updated = getAccessibleEntities(db.Categories).SingleOrDefault(cat => cat.Id == id);
+            Category updated = cats.EntitiesOfUser(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);
             if (updated == null)
             {
                 return NotFound();
@@ -89,7 +93,7 @@ namespace NBudget.Controllers
         [Route("{userId}/{id}")]
         public IHttpActionResult DeleteCategory(string userId, int id)
         {
-            Category category = getAccessibleEntities(db.Categories).SingleOrDefault(cat => cat.Id == id);
+            Category category = cats.EntitiesOfUser(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);
             if (category == null)
             {
                 return NotFound();

@@ -1,8 +1,7 @@
 namespace NBudget.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class RequiredOwnerAndCategoryName : DbMigration
     {
         public override void Up()

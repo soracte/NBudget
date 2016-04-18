@@ -53,9 +53,9 @@ namespace NBudget
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
+            app.UseFacebookAuthentication(
+                appId: "1661813024082526",
+                appSecret: "80ec5fb90f3a515fe8bcde421d0e1d50");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
