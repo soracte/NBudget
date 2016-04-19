@@ -9,6 +9,7 @@ class LoginViewModel {
         this.email = ko.observable();
         this.password = ko.observable();
         this.self = this;
+        this.facebookLoginUrl = auth.facebookLoginUrl; 
     }
 
     login() {

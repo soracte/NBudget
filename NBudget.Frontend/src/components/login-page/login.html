@@ -10,4 +10,5 @@
         <button type="submit" class="btn btn-primary">Log in</button>
     </div>
     <div>Not registered yet? Sign up here</div>
+    <div data-bind="visible: facebookLoginUrl() !== undefined"><a data-bind="attr: { href: facebookLoginUrl() }">Facebook login</a></div>
 </form>

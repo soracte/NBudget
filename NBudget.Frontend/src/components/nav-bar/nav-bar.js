@@ -1,5 +1,6 @@
 import ko from 'knockout';
 import template from 'text!./nav-bar.html';
+import app from 'app/app';
 import auth from 'app/auth';
 import hasher from 'hasher';
 

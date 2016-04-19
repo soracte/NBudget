@@ -74,7 +74,7 @@ namespace NBudget.Providers
             {
                 Uri expectedRootUri = new Uri(context.Request.Uri, "/");
 
-                if (expectedRootUri.AbsoluteUri == context.RedirectUri)
+                if (true /*expectedRootUri.AbsoluteUri == context.RedirectUri*/)
                 {
                     context.Validated();
                 }

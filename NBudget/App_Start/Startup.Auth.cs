@@ -6,6 +6,10 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using NBudget.Providers;
 using NBudget.Models;
+using Microsoft.Owin.Security.Facebook;
+using NBudget.Http;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace NBudget
 {
@@ -38,7 +42,7 @@ namespace NBudget
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
-                
+
             };
 
             // Enable the application to use bearer tokens to authenticate users
@@ -52,10 +56,25 @@ namespace NBudget
             //app.UseTwitterAuthentication(
             //    consumerKey: "",
             //    consumerSecret: "");
+            FacebookAuthenticationOptions facebookOptions = new FacebookAuthenticationOptions()
+            {
+                AppId = "1661813024082526",
+                AppSecret = "80ec5fb90f3a515fe8bcde421d0e1d50",
+                UserInformationEndpoint = "https://graph.facebook.com/v2.4/me?fields=id,name,email,first_name,last_name,location",
+                BackchannelHttpHandler = new FacebookBackChannelHandler(),
+                Provider = new FacebookAuthenticationProvider
+                {
+                    OnAuthenticated = (ctx) =>
+                    {
+                        ctx.Identity.AddClaim(new Claim(ClaimTypes.GivenName, ctx.User["first_name"].ToString()));
+                        ctx.Identity.AddClaim(new Claim(ClaimTypes.Surname, ctx.User["last_name"].ToString()));
+                        return Task.FromResult(0);
+                    }
+                }
+            };
 
-            app.UseFacebookAuthentication(
-                appId: "1661813024082526",
-                appSecret: "80ec5fb90f3a515fe8bcde421d0e1d50");
+            facebookOptions.Scope.Add("email");
+            app.UseFacebookAuthentication(facebookOptions);
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

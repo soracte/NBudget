@@ -6,6 +6,7 @@ import auth from 'app/auth';
 class HomeViewModel {
     constructor(route) {
         this.message = ko.computed(() => auth.authenticated() ? 'Welcome back, ' + auth.principal().fname + '.' : 'Welcome to NBudget.' );
+        console.log(location.hash);
     }
 }
 

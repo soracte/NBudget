@@ -16,6 +16,7 @@ using NBudget.Providers;
 using NBudget.Results;
 using NBudget.Controllers.ApiControllers;
 using System.Linq;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace NBudget.Controllers
 {
@@ -40,10 +41,10 @@ namespace NBudget.Controllers
             return new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
-                FirstName = appUser.FirstName,
-                LastName = appUser.LastName,
-                Invitees = appUser.Invitees.Select(inv => inv.Id),
-                Inviter = appUser.Inviters.Select(inv => inv.Id),
+                FirstName = appUser?.FirstName,
+                LastName = appUser?.LastName,
+                Invitees = appUser?.Invitees.Select(inv => inv.Id),
+                Inviter = appUser?.Inviters.Select(inv => inv.Id),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
@@ -328,20 +329,27 @@ namespace NBudget.Controllers
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("RegisterExternal")]
-        public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
+        public async Task<IHttpActionResult> RegisterExternal()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var info = await Authentication.GetExternalLoginInfoAsync();
+            var info = await AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer();
             if (info == null)
             {
                 return InternalServerError();
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var user = new ApplicationUser()
+            {
+                Email = externalLogin.UserName,
+                UserName = externalLogin.UserName,
+                FirstName = externalLogin.FirstName,
+                LastName = externalLogin.LastName
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user);
             if (!result.Succeeded)
@@ -369,6 +377,27 @@ namespace NBudget.Controllers
         }
 
         #region Helpers
+
+        private async Task<ExternalLoginInfo> AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer()
+        {
+            ExternalLoginInfo loginInfo = null;
+
+            var result = await Authentication.AuthenticateAsync(DefaultAuthenticationTypes.ExternalBearer);
+
+            if (result != null && result.Identity != null)
+            {
+                var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
+                if (idClaim != null)
+                {
+                    loginInfo = new ExternalLoginInfo()
+                    {
+                        DefaultUserName = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", ""),
+                        Login = new UserLoginInfo(idClaim.Issuer, idClaim.Value)
+                    };
+                }
+            }
+            return loginInfo;
+        }
 
         private IAuthenticationManager Authentication
         {
@@ -409,6 +438,8 @@ namespace NBudget.Controllers
             public string LoginProvider { get; set; }
             public string ProviderKey { get; set; }
             public string UserName { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
 
             public IList<Claim> GetClaims()
             {
@@ -417,7 +448,9 @@ namespace NBudget.Controllers
 
                 if (UserName != null)
                 {
-                    claims.Add(new Claim(ClaimTypes.Name, UserName, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.Email, UserName, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.GivenName, FirstName, null, LoginProvider));
+                    claims.Add(new Claim(ClaimTypes.Surname, LastName, null, LoginProvider));
                 }
 
                 return claims;
@@ -447,7 +480,9 @@ namespace NBudget.Controllers
                 {
                     LoginProvider = providerKeyClaim.Issuer,
                     ProviderKey = providerKeyClaim.Value,
-                    UserName = identity.FindFirstValue(ClaimTypes.Name)
+                    UserName = identity.FindFirstValue(ClaimTypes.Email),
+                    FirstName = identity.FindFirstValue(ClaimTypes.GivenName),
+                    LastName = identity.FindFirstValue(ClaimTypes.Surname)
                 };
             }
         }

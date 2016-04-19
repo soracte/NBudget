@@ -5,7 +5,9 @@ class Auth {
         var token = sessionStorage.getItem('token');
         this.authenticated = ko.observable(false);
         this.principal = ko.observable();
+        this.facebookLoginUrl = ko.observable();
 
+        this.loadExternalAuthenticationOptions();
         this.authenticate();
     }
 
@@ -40,6 +42,16 @@ class Auth {
     hasToken() {
         var token = sessionStorage.getItem('token');
         return token !== null && token !== undefined;
+    }
+
+    loadExternalAuthenticationOptions() {
+        $.get("http://localhost:55880/api/Account/ExternalLogins?returnUrl=http://localhost:8080&generateState=true")
+        .done(data => {
+            var facebookLogin = data.find(login => login.Name === 'Facebook')
+            if (facebookLogin) {
+                this.facebookLoginUrl('http://localhost:55880' + facebookLogin.Url);
+            }
+        })
     }
 }
 

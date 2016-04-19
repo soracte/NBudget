@@ -227,6 +227,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Http\FacebookBackChannelHandler.cs" />
     <Compile Include="Migrations\201604131347169_InitialCreate.cs" />
     <Compile Include="Migrations\201604131347169_InitialCreate.Designer.cs">
       <DependentUpon>201604131347169_InitialCreate.cs</DependentUpon>
@@ -311,6 +312,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <None Include="Properties\PublishProfiles\NBudget - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\NBudget20160418103322 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\nbudget\register.js" />
     <Content Include="Scripts\nbudget\login.js" />
