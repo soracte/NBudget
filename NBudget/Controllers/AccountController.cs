@@ -40,11 +40,12 @@ namespace NBudget.Controllers
 
             return new UserInfoViewModel
             {
+                Id = User.Identity.GetUserId(),
                 Email = User.Identity.GetUserName(),
                 FirstName = appUser?.FirstName,
                 LastName = appUser?.LastName,
-                Invitees = appUser?.Invitees.Select(inv => inv.Id),
-                Inviter = appUser?.Inviters.Select(inv => inv.Id),
+                Invitees = appUser?.Invitees.Select(inv => new UserNameInfo() { Id = inv.Id, FirstName = inv.FirstName, LastName = inv.LastName }),
+                Inviters = appUser?.Inviters.Select(inv => new UserNameInfo() { Id = inv.Id, FirstName = inv.FirstName, LastName = inv.LastName }), 
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };

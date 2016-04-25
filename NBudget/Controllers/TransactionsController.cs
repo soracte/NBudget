@@ -71,7 +71,7 @@ namespace NBudget.Controllers
         }
 
         [ResponseType(typeof(Transaction))]
-        [Route("{userId}")]
+        [Route("{userId}", Name = "PostTransaction")]
         public IHttpActionResult PostTransaction(string userId, TransactionDTO transaction)
         {
             if (!ModelState.IsValid)
@@ -104,7 +104,7 @@ namespace NBudget.Controllers
             db.Transactions.Add(addedTransaction);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = addedTransaction.Id }, transaction);
+            return CreatedAtRoute("PostTransaction", new { id = addedTransaction.Id }, transaction);
         }
 
         [ResponseType(typeof(Transaction))]

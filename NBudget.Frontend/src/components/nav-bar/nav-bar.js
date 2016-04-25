@@ -8,10 +8,21 @@ class NavBarViewModel {
     constructor(params) {
         this.route = params.route;        
         this.authenticated = auth.authenticated; 
+        this.inviters = auth.inviters;
     }
 
     logout() {
         auth.logout(() => hasher.setHash(''));
+    }
+
+    changeToOwn() {
+        auth.changeToOwn();
+        return true;
+    }
+
+    changeOwner(item) {
+        auth.changeOwner(item.Id);
+        return true;
     }
 }
 

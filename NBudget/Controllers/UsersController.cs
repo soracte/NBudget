@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using NBudget.Attributes;
 using NBudget.Models;
 using System.Collections.Generic;
 using System.Linq;

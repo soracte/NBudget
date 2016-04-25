@@ -3,6 +3,7 @@ import 'knockout-validation';
 import tlistTemplate from 'text!./tlist.html';
 import moment from 'moment';
 import Pikaday from 'pikaday';
+import http from 'app/http';
 
 class Transaction {
     constructor(date, amount, reason, categoryId) {
@@ -74,29 +75,24 @@ class TransactionListViewModel {
 
         var addedTransaction = new Transaction(this.date(), this.amount(), this.reason(), this.category().id());
 
-        $.ajax("http://localhost:55880/api/Transactions", {
-            data: ko.toJSON(addedTransaction),
-            type: "post",
-            contentType: "application/json",
-            success: result => {
-                this.reloadGrid();
-                this.resetVm();
-                $('#newTransactionModal').modal('hide');
-            }
+        http.post("http://localhost:55880/api/Transactions/", addedTransaction, result => {
+            this.reloadGrid();
+            this.resetVm();
+            $('#newTransactionModal').modal('hide');
         });
     }
 
     reloadGrid() {
         var categories = [];
-
         this.loading(true);
-        $.getJSON("http://localhost:55880/api/Categories", categoryData => {
+
+        http.get("http://localhost:55880/api/Categories", cats => {
             var path = "http://localhost:55880/api/Transactions" + ('?' + $.param({ catid: this.checkedCategories() }, true) || '');
-            $.getJSON(path, data => {
-                this.fillWithData(data, categoryData);
+            http.get(path, data => {
+                this.fillWithData(data, cats);
                 this.loading(false);
-            });
-        });
+            })
+        })
     }
 
     filterByCategories() {

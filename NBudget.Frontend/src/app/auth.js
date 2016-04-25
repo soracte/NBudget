@@ -6,6 +6,9 @@ class Auth {
         this.authenticated = ko.observable(false);
         this.principal = ko.observable();
         this.facebookLoginUrl = ko.observable();
+        this.inviters = ko.observableArray();
+        this.currentUserId = ko.observable();
+        this.currentUserFirstName = ko.observable();
 
         this.loadExternalAuthenticationOptions();
         this.authenticate();
@@ -21,7 +24,9 @@ class Auth {
             headers: { 'Authorization' : 'Bearer ' + sessionStorage.getItem('token')}
         })
         .done(data => {
-            this.principal({ "fname": data.FirstName, "lname": data.LastName, "email": data.Email });
+            this.principal({ "id": data.Id, "fname": data.FirstName, "lname": data.LastName, "email": data.Email });
+            this.inviters(data.Inviters);
+            this.changeToOwn();            
             this.authenticated(true);
             (cb || $.noop)();
         });
@@ -52,6 +57,16 @@ class Auth {
                 this.facebookLoginUrl('http://localhost:55880' + facebookLogin.Url);
             }
         })
+    }
+
+    changeToOwn() {
+        this.currentUserId(this.principal().id);
+        this.currentUserFirstName(this.principal().fname);
+    }
+
+    changeOwner(id) {
+        this.currentUserId(id);
+        this.currentUserFirstName(this.inviters().find(inv => inv.Id == id).FirstName);
     }
 }
 

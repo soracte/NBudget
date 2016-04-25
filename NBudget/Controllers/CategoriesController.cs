@@ -70,7 +70,7 @@ namespace NBudget.Controllers
 
         // POST: api/Categories
         [ResponseType(typeof(Category))]
-        [Route("{userId}")]
+        [Route("{userId}", Name = "PostCategory")]
         public IHttpActionResult PostCategory(string userId, [FromBody] CategoryDTO category)
         {
             if (!ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace NBudget.Controllers
             db.Categories.Add(added);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = added.Id }, category);
+            return CreatedAtRoute("PostCategory", new { id = added.Id }, category);
         }
 
         // DELETE: api/Categories/5
