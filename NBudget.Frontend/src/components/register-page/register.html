@@ -1,0 +1,23 @@
+﻿<form class="form" style="margin: 10px;" data-bind="submit: register">
+    <h1>Register</h1>
+    <div class="form-group" data-bind="validationElement: email">
+        <input type="text" class="form-control" data-bind="textInput: email" placeholder="E-mail address" />
+    </div>
+    <div class="form-group" data-bind="validationElement: password">
+        <input type="password" class="form-control" data-bind="textInput: password" placeholder="Password" />
+    </div>
+    <div class="form-group" data-bind="validationElement: confirmPassword">
+        <input type="password" class="form-control" data-bind="textInput: confirmPassword" placeholder="Confirm password" />
+    </div>
+    <div class="form-group" data-bind="validationElement: firstName">
+        <input type="text" class="form-control" data-bind="textInput: firstName" placeholder="First Name" />
+    </div>
+    <div class="form-group" data-bind="validationElement: lastName">
+        <input type="text" class="form-control" data-bind="textInput: lastName" placeholder="Last Name" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" data-bind="enable: validationModel.isValid()">Register</button>
+    </div>
+    <div>Already have an account? <a href="#login">Log in here.</a>
+    </div>
+</form>

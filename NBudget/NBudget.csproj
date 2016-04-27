@@ -221,6 +221,7 @@
     <Compile Include="Attributes\AnotherUserAuthorizeAttribute.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -265,6 +266,8 @@
       <DependentUpon>201604162124097_MultipleInviters.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Invitation.cs" />
+    <Compile Include="Models\InvitationBindingModels.cs" />
     <Compile Include="Models\OwnedEntity.cs" />
     <Compile Include="Models\UsersBindingModels.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

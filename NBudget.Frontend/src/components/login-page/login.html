@@ -1,14 +1,15 @@
 <form class="form" style="margin: 10px;" data-bind="submit: login">
     <h1>Log in</h1>
+    <em data-bind="visible: regSuccess">Registration successful, please log in.</em>
     <div class="form-group">
         <input type="text" class="form-control" data-bind="value: email" placeholder="E-mail address" />
     </div>
     <div class="form-group">
-        <input type="text" class="form-control" data-bind="value: password" placeholder="Password" />
+        <input type="password" class="form-control" data-bind="value: password" placeholder="Password" />
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Log in</button>
     </div>
-    <div>Not registered yet? Sign up here</div>
+    <div>Not registered yet? <a href="#register">Sign up here</a></div>
     <div data-bind="visible: facebookLoginUrl() !== undefined"><a data-bind="attr: { href: facebookLoginUrl() }">Facebook login</a></div>
 </form>

@@ -323,7 +323,7 @@ namespace NBudget.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return Ok(new { Message = "Registration successful." });
         }
 
         // POST api/Account/RegisterExternal

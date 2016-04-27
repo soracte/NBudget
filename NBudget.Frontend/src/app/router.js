@@ -41,6 +41,8 @@ var routerInstance = new Router({
         { url: 'about',     params: { page: 'about-page' } },
         { url: 'tlist',     params: { page: 'transaction-list' } },
         { url: 'login',     params: { page: 'login-page'  } },
+        { url: 'login/regSuccess',     params: { page: 'login-page', regSuccess: true } },
+        { url: 'register',     params: { page: 'register-page'  } },
         { url: 'access_token={token}',     params: { page: 'external-login'  } },
     ]
 });
