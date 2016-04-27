@@ -35,7 +35,6 @@ namespace NBudget.Controllers.ApiControllers
         }
 
         [Route("ModifyInviter/{id}")]
-        [Obsolete]
         public async Task<IHttpActionResult> PutInviters(string id, [FromBody] UpdateInviterBindingModel invModel)
         {
             ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -75,7 +74,6 @@ namespace NBudget.Controllers.ApiControllers
 
         [Route("Invitees")]
         [HttpPut]
-        [Obsolete]
         public async Task<IHttpActionResult> PutInviteesForCurrentUser([FromBody] UpdateInviteesBindingModel inviteeIds)
         {
             ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -113,7 +111,6 @@ namespace NBudget.Controllers.ApiControllers
 
         [Route("Invitees")]
         [HttpDelete]
-        [Obsolete]
         public async Task<IHttpActionResult> DeleteInviteesOfCurrentUser([FromUri] string[] inviteesToDelete)
         {
             ApplicationUser currentUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());

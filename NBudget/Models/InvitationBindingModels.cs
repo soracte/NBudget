@@ -11,4 +11,10 @@ namespace NBudget.Models
         [Required]
         public string RecipientEmail { get; set; }
     }
+
+    public class UpdateInvitationBindingModel
+    {
+        [Required]
+        public InvitationStatus InvitationStatus { get; set; }
+    }
 }

@@ -5,7 +5,7 @@ namespace NBudget.Models
     public class Invitation 
     {
         public int Id { get; set; }
-        public ApplicationUser Sender { get; set; }
+        public virtual ApplicationUser Sender { get; set; }
         public string RecipientEmail { get; set; }
         public InvitationStatus Status { get; set; }
     }

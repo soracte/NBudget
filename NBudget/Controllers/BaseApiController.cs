@@ -1,11 +1,20 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity.Owin;
+using NBudget.Models;
 
 namespace NBudget.Controllers.ApiControllers
 {
-    public class BaseApiController  : ApiController
+    public class BaseApiController : ApiController
     {
+        public NBudgetContext db
+        {
+            get
+            {
+                return Request.GetOwinContext().Get<NBudgetContext>();
+            }
+        }
+
         public ApplicationUserManager UserManager
         {
             get
@@ -13,8 +22,6 @@ namespace NBudget.Controllers.ApiControllers
                 return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
         }
-
-
 
         public ApplicationRoleManager RoleManager
         {

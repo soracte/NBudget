@@ -265,6 +265,10 @@
     <Compile Include="Migrations\201604162124097_MultipleInviters.Designer.cs">
       <DependentUpon>201604162124097_MultipleInviters.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604272002445_AddInvitations.cs" />
+    <Compile Include="Migrations\201604272002445_AddInvitations.Designer.cs">
+      <DependentUpon>201604272002445_AddInvitations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationBindingModels.cs" />
@@ -403,6 +407,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604162124097_MultipleInviters.resx">
       <DependentUpon>201604162124097_MultipleInviters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604272002445_AddInvitations.resx">
+      <DependentUpon>201604272002445_AddInvitations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
