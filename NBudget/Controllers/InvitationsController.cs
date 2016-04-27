@@ -17,6 +17,8 @@ namespace NBudget.Controllers
 {
     public class InvitationsController : BaseApiController
     {
+        public delegate void ProcessUserDelegate(ApplicationUser user);
+
         // GET: api/Invitations
         public IQueryable<Invitation> GetInvitations()
         {
@@ -37,30 +39,6 @@ namespace NBudget.Controllers
             return Ok(invitation);
         }
 
-        // PUT: api/Invitations/5
-        [ResponseType(typeof(void))]
-        [Obsolete]
-        public IHttpActionResult PutInvitationStatus(int id, UpdateInvitationBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Invitation invitation = db.Invitations.Find(id);
-
-            if (!OwnInvitationExists(invitation))
-            {
-                return NotFound();
-            }
-
-            invitation.Status = model.InvitationStatus;
-            db.Entry(invitation).State = EntityState.Modified;
-
-            db.SaveChanges();
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/Invitations
         [ResponseType(typeof(Invitation))]
         public IHttpActionResult PostInvitation(NewInvitationBindingModel model)
@@ -72,7 +50,7 @@ namespace NBudget.Controllers
 
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
             Invitation invitation = new Invitation { RecipientEmail = model.RecipientEmail, Sender = currentUser, Status = InvitationStatus.Pending };
-            AddInviteeRelationship(invitation, model.RecipientEmail);
+            ProcessInviteeRelationship(invitation);
 
 
             db.Invitations.Add(invitation);
@@ -91,6 +69,8 @@ namespace NBudget.Controllers
                 return NotFound();
             }
 
+            ProcessInviteeRelationship(invitation);
+
             db.Invitations.Remove(invitation);
             db.SaveChanges();
 
@@ -99,12 +79,12 @@ namespace NBudget.Controllers
 
         private bool OwnInvitationExists(Invitation invitation)
         {
-            return (invitation == null && invitation.Sender.Id == User.Identity.GetUserId());
+            return (invitation != null && invitation.Sender.Id == User.Identity.GetUserId());
         }
 
-        private void AddInviteeRelationship(Invitation invitation, string recipientEmail)
+        private void ProcessInviteeRelationship(Invitation invitation)
         {
-            ApplicationUser recipientUser = UserManager.FindByEmail(recipientEmail);
+            ApplicationUser recipientUser = UserManager.FindByEmail(invitation.RecipientEmail);
             if (recipientUser == null)
             {
                 return;
@@ -112,12 +92,22 @@ namespace NBudget.Controllers
 
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
 
-            recipientUser.Inviters.Add(currentUser);
-            currentUser.Invitees.Add(recipientUser);
+            if (invitation.Status == InvitationStatus.Pending)
+            {
+                recipientUser.Inviters.Add(currentUser);
+                currentUser.Invitees.Add(recipientUser);
+                invitation.Status = InvitationStatus.Active;
+            }
+
+            else if (invitation.Status == InvitationStatus.Active)
+            {
+                recipientUser.Inviters.Remove(currentUser);
+                currentUser.Invitees.Remove(recipientUser);
+                invitation.Status = InvitationStatus.Inactive;
+            }
 
             UserManager.Update(recipientUser);
             UserManager.Update(currentUser);
-            invitation.Status = InvitationStatus.Active;
         }
 
         protected override void Dispose(bool disposing)
