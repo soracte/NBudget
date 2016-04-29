@@ -44,6 +44,7 @@ var routerInstance = new Router({
         { url: 'login/regSuccess',     params: { page: 'login-page', regSuccess: true } },
         { url: 'register',     params: { page: 'register-page'  } },
         { url: 'access_token={token}',     params: { page: 'external-login'  } },
+        { url: 'invitations',     params: { page: 'invitations'  } },
     ]
 });
 

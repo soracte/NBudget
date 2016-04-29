@@ -269,6 +269,10 @@
     <Compile Include="Migrations\201604272002445_AddInvitations.Designer.cs">
       <DependentUpon>201604272002445_AddInvitations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604281237407_AddCreationTimeToInvitation.cs" />
+    <Compile Include="Migrations\201604281237407_AddCreationTimeToInvitation.Designer.cs">
+      <DependentUpon>201604281237407_AddCreationTimeToInvitation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationBindingModels.cs" />
@@ -410,6 +414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604272002445_AddInvitations.resx">
       <DependentUpon>201604272002445_AddInvitations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604281237407_AddCreationTimeToInvitation.resx">
+      <DependentUpon>201604281237407_AddCreationTimeToInvitation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

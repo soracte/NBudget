@@ -76,6 +76,7 @@ namespace NBudget
             facebookOptions.Scope.Add("email");
             app.UseFacebookAuthentication(facebookOptions);
 
+
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
             //    ClientId = "",

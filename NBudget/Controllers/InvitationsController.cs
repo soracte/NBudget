@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+﻿using System.Data;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NBudget.Models;
 using Microsoft.AspNet.Identity;
 using NBudget.Controllers.ApiControllers;
-using System.Threading.Tasks;
+using System;
+using System.Net.Mail;
 
 namespace NBudget.Controllers
 {
@@ -20,10 +15,18 @@ namespace NBudget.Controllers
         public delegate void ProcessUserDelegate(ApplicationUser user);
 
         // GET: api/Invitations
-        public IQueryable<Invitation> GetInvitations()
+        public IHttpActionResult GetInvitations()
         {
             string currentUserId = User.Identity.GetUserId();
-            return db.Invitations.Where(i => i.Sender.Id == currentUserId);
+            var invs = db.Invitations.Where(i => i.Sender.Id == currentUserId).Select(i => new
+            {
+                Id = i.Id,
+                CreationDate = i.CreationDate,
+                RecipientEmail = i.RecipientEmail,
+                Status = i.Status.ToString()
+            });
+
+            return Ok(invs);
         }
 
         // GET: api/Invitations/5
@@ -49,9 +52,16 @@ namespace NBudget.Controllers
             }
 
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
-            Invitation invitation = new Invitation { RecipientEmail = model.RecipientEmail, Sender = currentUser, Status = InvitationStatus.Pending };
-            ProcessInviteeRelationship(invitation);
+            Invitation invitation = new Invitation
+            {
+                RecipientEmail = model.RecipientEmail,
+                Sender = currentUser,
+                Status = InvitationStatus.Pending,
+                CreationDate = DateTime.Now
+            };
 
+            ProcessInviteeRelationship(invitation);
+            NotifyRecipientByEmail(model.RecipientEmail, currentUser.FirstName + ' ' + currentUser.LastName);
 
             db.Invitations.Add(invitation);
             db.SaveChanges();
@@ -64,15 +74,14 @@ namespace NBudget.Controllers
         public IHttpActionResult DeleteInvitation(int id)
         {
             Invitation invitation = db.Invitations.Find(id);
+            db.Entry(invitation).Reference(i => i.Sender).Load();
+
             if (!OwnInvitationExists(invitation))
             {
                 return NotFound();
             }
 
             ProcessInviteeRelationship(invitation);
-
-            db.Invitations.Remove(invitation);
-            db.SaveChanges();
 
             return Ok(invitation);
         }
@@ -108,6 +117,20 @@ namespace NBudget.Controllers
 
             UserManager.Update(recipientUser);
             UserManager.Update(currentUser);
+        }
+
+        private void NotifyRecipientByEmail(string recipientEmail, string ownerName)
+        {
+            SmtpClient smtpClient = new SmtpClient("localhost", 25);
+
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            MailMessage mail = new MailMessage();
+
+            mail.From = new MailAddress("nbudget@example.com", "NBudget");
+            mail.To.Add(new MailAddress(recipientEmail));
+            mail.Body = "You've been invited to edit " + ownerName + "'s budget. Please register or log in to NBudget to accept the invitation.";
+
+            smtpClient.Send(mail);
         }
 
         protected override void Dispose(bool disposing)

@@ -14,7 +14,6 @@ namespace NBudget.Controllers
     [RoutePrefix("api/Categories")]
     public class CategoriesController : BaseApiController 
     {
-        private NBudgetContext db = new NBudgetContext();
         private EntityQuery<Category> cats = new EntityQuery<Category>();
 
         // GET: api/Categories
@@ -79,7 +78,7 @@ namespace NBudget.Controllers
             }
 
             var currentUserId = User.Identity.GetUserId();
-            ApplicationUser currentUser = db.Users.Find(currentUserId) as ApplicationUser;
+            ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
             Category added = new Category { Name = category.Name, Owner = currentUser };
 
             db.Categories.Add(added);

@@ -1,8 +1,7 @@
 namespace NBudget.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class AddInvitations : DbMigration
     {
         public override void Up()

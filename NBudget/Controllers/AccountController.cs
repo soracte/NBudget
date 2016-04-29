@@ -17,6 +17,8 @@ using NBudget.Results;
 using NBudget.Controllers.ApiControllers;
 using System.Linq;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity.Validation;
+using System.Data.Entity;
 
 namespace NBudget.Controllers
 {
@@ -316,12 +318,13 @@ namespace NBudget.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-            await UserManager.AddToRolesAsync(user.Id, new string[] {"USER"});
 
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
+
+            UpdateInvitationStatusForNewUser(model.Email);
 
             return Ok(new { Message = "Registration successful." });
         }
@@ -363,6 +366,8 @@ namespace NBudget.Controllers
             {
                 return GetErrorResult(result); 
             }
+
+            UpdateInvitationStatusForNewUser(externalLogin.UserName);
             return Ok();
         }
 
@@ -378,6 +383,31 @@ namespace NBudget.Controllers
         }
 
         #region Helpers
+
+        private void UpdateInvitationStatusForNewUser(string email)
+        {
+            Invitation pendingInvitationForUser = (from i in db.Invitations
+                                                   where i.Status == InvitationStatus.Pending
+                                                   && i.RecipientEmail == email 
+                                                   select i).Include(i => i.Sender)
+                                                   .SingleOrDefault();
+
+            if (pendingInvitationForUser != null)
+            {
+                pendingInvitationForUser.Status = InvitationStatus.Active;
+                db.Entry(pendingInvitationForUser).State = EntityState.Modified;
+
+                try
+                {
+                    db.SaveChanges();
+                } catch (DbEntityValidationException e)
+                {
+                    Console.WriteLine(e.EntityValidationErrors.ToString());
+                }
+            }
+        }
+
+
 
         private async Task<ExternalLoginInfo> AuthenticationManager_GetExternalLoginInfoAsync_WithExternalBearer()
         {

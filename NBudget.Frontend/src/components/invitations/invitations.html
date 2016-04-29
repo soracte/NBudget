@@ -1,0 +1,28 @@
+<h2>Invitations</h2>
+
+<form class="form form-inline" data-bind="submit: addNewInvitation">
+    <div class="form-group" >
+        <input type="text" class="form-control" placeholder="Send invitation to..." data-bind="textInput: recipientEmail"/>
+    </div>
+    <input type="submit" class="btn btn-primary" data-bind="enable: validationModel.isValid() && recipientEmail" value="Send" />
+</form>
+
+<div id="loadingLabel" data-bind="visible: loading">Loading data...</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Creation Date</th>
+            <th>Recipient</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: gridData">
+        <tr>
+            <td data-bind="text: CreationDate"></td>
+            <td data-bind="text: RecipientEmail"></td>
+            <td data-bind="text: Status"></td>
+            <td><button class="btn btn-danger" data-bind="click: $parent.deleteInvitation.bind($component)">Cancel</button></td>
+        </tr>
+    </tbody>
+</table>

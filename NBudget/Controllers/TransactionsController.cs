@@ -7,13 +7,13 @@ using System.Web.Http.Description;
 using NBudget.Models;
 using NBudget.Controllers.ApiControllers;
 using NBudget.Persistence;
+using Microsoft.AspNet.Identity;
 
 namespace NBudget.Controllers
 {
     [RoutePrefix("api/Transactions")]
     public class TransactionsController : BaseApiController 
     {
-        private NBudgetContext db = new NBudgetContext();
         private EntityQuery<Transaction> transactions = new EntityQuery<Transaction>();
         private EntityQuery<Category> cats = new EntityQuery<Category>();
 
@@ -86,7 +86,7 @@ namespace NBudget.Controllers
                 return NotFound();
             }
 
-            ApplicationUser user = db.Users.SingleOrDefault(u => u.Id == userId) as ApplicationUser;
+            ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
             if (user == null)
             {
                 return NotFound();
