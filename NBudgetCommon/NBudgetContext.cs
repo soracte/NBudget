@@ -20,10 +20,10 @@ namespace NBudget.Models
             return new NBudgetContext();
         }
 
-        public System.Data.Entity.DbSet<NBudget.Models.Transaction> Transactions { get; set; }
+        public System.Data.Entity.DbSet<Transaction> Transactions { get; set; }
 
-        public System.Data.Entity.DbSet<NBudget.Models.Category> Categories { get; set; }
+        public System.Data.Entity.DbSet<Category> Categories { get; set; }
 
-        public System.Data.Entity.DbSet<NBudget.Models.Invitation> Invitations { get; set; }
+        public System.Data.Entity.DbSet<Invitation> Invitations { get; set; }
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="NBudgetCloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="WorkerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=NBudgetContext-20151015005101; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|NBudgetContext-20151015005101.mdf"  />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="NBudget">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
