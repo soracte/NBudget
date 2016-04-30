@@ -15,6 +15,10 @@ namespace NBudget.Models
         {
         }
 
+        public NBudgetContext(string connString) : base(connString)
+        {
+        }
+
         public static NBudgetContext Create()
         {
             return new NBudgetContext();

@@ -3,14 +3,15 @@
   <Role name="WorkerRole">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=NBudgetContext-20151015005101; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|NBudgetContext-20151015005101.mdf"  />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetcloudservice;AccountKey=EOPwSftLvsbf3akLTfsATLi2dEAZTh639c4ea83jsFMtmwtV57pJaDan0UrY2Eku4RRZ7so/qIkgPGTWxbIrsA==" />
+      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=NBudgetContext-20151015005101; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|NBudgetContext-20151015005101.mdf" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
   <Role name="NBudget">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetcloudservice;AccountKey=EOPwSftLvsbf3akLTfsATLi2dEAZTh639c4ea83jsFMtmwtV57pJaDan0UrY2Eku4RRZ7so/qIkgPGTWxbIrsA==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

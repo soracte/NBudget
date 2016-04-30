@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NBudgetContent\" />
+    <Folder Include="Profiles" />
     <Folder Include="WebRoleContent\" />
     <Folder Include="WorkerRoleContent\" />
   </ItemGroup>
@@ -63,6 +64,9 @@
     <DiagnosticsConfiguration Include="NBudgetContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="WebRoleContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="WorkerRoleContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\NBudgetCloudServiceProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

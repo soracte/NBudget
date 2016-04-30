@@ -4,6 +4,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="NBudgetContextConnectionString" />
+      <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
   <WebRole name="NBudget" vmsize="Small">
