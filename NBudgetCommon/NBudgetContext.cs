@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace NBudget.Models
 {
@@ -29,5 +30,8 @@ namespace NBudget.Models
         public System.Data.Entity.DbSet<Category> Categories { get; set; }
 
         public System.Data.Entity.DbSet<Invitation> Invitations { get; set; }
+
+        public System.Data.Entity.DbSet<ReportHeader> ReportHeaders { get; set; }
+
     }
 }

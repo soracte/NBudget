@@ -257,6 +257,7 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
+    <Compile Include="Controllers\ReportHeadersController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -307,6 +308,10 @@
     <Compile Include="Migrations\201604281237407_AddCreationTimeToInvitation.cs" />
     <Compile Include="Migrations\201604281237407_AddCreationTimeToInvitation.Designer.cs">
       <DependentUpon>201604281237407_AddCreationTimeToInvitation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604301402252_AddReportHeader.cs" />
+    <Compile Include="Migrations\201604301402252_AddReportHeader.Designer.cs">
+      <DependentUpon>201604301402252_AddReportHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\InvitationBindingModels.cs" />
@@ -449,6 +454,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604281237407_AddCreationTimeToInvitation.resx">
       <DependentUpon>201604281237407_AddCreationTimeToInvitation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604301402252_AddReportHeader.resx">
+      <DependentUpon>201604301402252_AddReportHeader.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=NBudgetContext-20151015005101; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|NBudgetContext-20151015005101.mdf"  />
+      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NBudgetContext-20151015005101;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"  />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
