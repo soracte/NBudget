@@ -13,6 +13,8 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents;
 using NBudgetCommon;
 using System.Data.Entity;
+using System.Linq;
+using NBudget.Persistence;
 
 namespace WorkerRole
 {
@@ -27,6 +29,8 @@ namespace WorkerRole
         private NBudgetContext db;
         private CloudQueue reportQueue;
         private DocumentClient dc;
+
+        private EntityQuery<Transaction> transactionsQuery = new EntityQuery<Transaction>();
 
         public override void Run()
         {
@@ -110,25 +114,9 @@ namespace WorkerRole
         {
             CreateReportMessageContent content = JsonConvert.DeserializeObject<CreateReportMessageContent>(message.AsString);
 
-            CategorySummary[] sampleSummary = new CategorySummary[]
-            {
-                new CategorySummary()
-                {
-                    CategoryName = db.Categories.Find(1).Name,
-                    Sum = 2000
-                }
-            };
 
-
-            Transaction sampleTransaction = db.Transactions.Find(1);
-            TransactionInfo sampleTransactionInfoElement = new TransactionInfo()
-            {
-                Amount = sampleTransaction.Amount,
-                CategoryName = sampleTransaction.Category.Name,
-                Reason = sampleTransaction.Reason
-            };
-
-            TransactionInfo[] sampleTransactionInfo = new TransactionInfo[] { sampleTransactionInfoElement };
+            CategorySummary[] categorySummary = CreateCategorySummary(content);
+            TransactionInfo[] topTransactions = CreateTopTransactions(content);
 
             Report report = new Report()
             {
@@ -137,8 +125,8 @@ namespace WorkerRole
                 FromDate = content.FromDate,
                 ToDate = content.ToDate,
                 CreationDate = DateTime.Now,
-                CategorySummaries = sampleSummary,
-                TopTransactions = sampleTransactionInfo
+                CategorySummaries = categorySummary,
+                TopTransactions = topTransactions 
             };
 
             CreateReportIfNotExists("reports", "ReportCollection", report).Wait();
@@ -149,6 +137,35 @@ namespace WorkerRole
             db.SaveChanges();
 
             reportQueue.DeleteMessage(message);
+        }
+
+        private TransactionInfo[] CreateTopTransactions(CreateReportMessageContent content)
+        {
+            var top = transactionsQuery.EntitiesOfUser(db.Transactions, content.OwnerId)
+                .Where(t =>
+                t.Date >= content.FromDate &&
+                t.Date <= content.ToDate &&
+                t.Owner.Id == content.OwnerId)
+                .OrderByDescending(t => t.Amount)
+                .Take(5);
+
+            return top.Select(t => new TransactionInfo()
+            {
+                Amount = t.Amount,
+                CategoryName = t.Category.Name,
+                Reason = t.Reason
+            }).ToArray();
+        }
+
+        private CategorySummary[] CreateCategorySummary(CreateReportMessageContent content)
+        {
+            return transactionsQuery.EntitiesOfUser(db.Transactions, content.OwnerId)
+                .GroupBy(t => t.Category)
+                .Select(g => new CategorySummary()
+                {
+                    CategoryName = g.FirstOrDefault().Category.Name,
+                    Sum = g.Sum(t => t.Amount)
+                }).ToArray();
         }
 
         private async Task CreateDatabaseIfNotExists(string databaseName)

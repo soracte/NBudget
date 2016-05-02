@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="CreateReportMessageContent.cs" />
+    <Compile Include="EntityQuery.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Invitation.cs" />
     <Compile Include="NBudgetContext.cs" />
