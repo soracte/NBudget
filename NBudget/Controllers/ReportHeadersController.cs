@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using NBudget.Attributes;
 using NBudget.Controllers.ApiControllers;
 using NBudget.Models;
+using NBudget.Persistence;
 using NBudgetCommon;
+using NBudgetCommon.Factory;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -11,36 +15,74 @@ using System.Web.Http;
 
 namespace NBudget.Controllers
 {
+    [RoutePrefix("api/ReportHeaders")]
     public class ReportHeadersController : BaseApiController
     {
+        private EntityQuery<ReportHeader> reportHeaders = new EntityQuery<ReportHeader>();
+
         // GET: api/ReportHeaders
-        public IHttpActionResult GetReportHeaders()
+        [Route("{userId}")]
+        [AnotherUserAuthorize]
+        public IHttpActionResult GetReportHeaders(string userId)
         {
-            var retval = db.ReportHeaders.Select(r => new
+            var retval = reportHeaders.EntitiesOfUser(db.ReportHeaders, userId)
+                .Select(r => new
             {
                 Id = r.Id,
                 Created = r.CreationDate,
-                ReportDocumentId = r.ReportDocumentId
+                ReportDocumentId = r.ReportDocumentId,
+                FromDate = r.FromDate,
+                ToDate = r.ToDate
             });
 
             return Ok(retval);
         }
 
-        // GET: api/ReportHeaders/5
-        public IHttpActionResult GetReportHeader(int id)
+        // GET: api/ReportHeaders
+        [Route("{userId}/{reportHeaderId}")]
+        [AnotherUserAuthorize]
+        public IHttpActionResult GetReportHeader(string userId, int reportHeaderId)
         {
-            var currentUserId = User.Identity.GetUserId();
-            var report = db.ReportHeaders.Where(r => r.Owner.Id == currentUserId);
+            ReportHeader header = reportHeaders.EntitiesOfUser(db.ReportHeaders, userId).SingleOrDefault(rh => rh.Id == reportHeaderId);
+
+            if (header == null)
+            {
+                return NotFound();
+            }
+
+            DocumentClient dc = DocumentClientFactory.CreateDocumentClient();
+            IQueryable<Report> reportDocuments = dc.CreateDocumentQuery<Report>(UriFactory.CreateDocumentCollectionUri("reports", "ReportCollection"))
+                .Where(r => r.Id == header.ReportDocumentId);
+
+            Report report = null;
+            foreach (Report reportItem in reportDocuments)
+            {
+                report = reportItem;
+            }
+
             if (report == null)
             {
                 return NotFound();
             }
 
-            return Ok(report);
+            var retval = new
+            {
+                Id = header.Id,
+                Created = header.CreationDate,
+                ReportDocumentId = header.ReportDocumentId,
+                FromDate = header.FromDate,
+                ToDate = header.ToDate,
+                TopTransactions = report.TopTransactions,
+                CategorySummary = report.CategorySummaries
+            };
+
+            return Ok(retval);
         }
 
         // POST: api/ReportHeaders
-        public IHttpActionResult PostReportHeader(NewReportBindingModel model)
+        [Route("{userId}")]
+        [AnotherUserAuthorize]
+        public IHttpActionResult PostReportHeader(string userId, [FromBody] NewReportBindingModel model)
         {
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
 
@@ -71,18 +113,8 @@ namespace NBudget.Controllers
 
             reportQueue.AddMessage(message);
 
-            return Ok();
+            return Ok(new { Message = "Report requested." });
 
-        }
-
-        // PUT: api/ReportHeaders/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/ReportHeaders/5
-        public void Delete(int id)
-        {
         }
 
         public class NewReportBindingModel

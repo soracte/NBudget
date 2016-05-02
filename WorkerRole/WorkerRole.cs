@@ -15,13 +15,12 @@ using NBudgetCommon;
 using System.Data.Entity;
 using System.Linq;
 using NBudget.Persistence;
+using NBudgetCommon.Factory;
 
 namespace WorkerRole
 {
     public class WorkerRole : RoleEntryPoint
     {
-        private const string EndpointUri = "https://nbdocumentdb.documents.azure.com:443/";
-        private const string PrimaryKey = "LXFOCBF2F6DiAof2Y4aUJ14mL5zq7YX44b3cWVMaNvGz4gsKWdpf8Fi1GN6rj0J1kEwy8lGkEVUhFFlz98Suuw==";
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
@@ -65,7 +64,7 @@ namespace WorkerRole
             reportQueue = queueClient.GetQueueReference("reports");
             reportQueue.CreateIfNotExists();
 
-            dc = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
+            dc = DocumentClientFactory.CreateDocumentClient();
             CreateDatabaseIfNotExists("reports").Wait();
             CreateDocumentCollectionIfNotExists("reports", "ReportCollection").Wait();
 
@@ -144,8 +143,7 @@ namespace WorkerRole
             var top = transactionsQuery.EntitiesOfUser(db.Transactions, content.OwnerId)
                 .Where(t =>
                 t.Date >= content.FromDate &&
-                t.Date <= content.ToDate &&
-                t.Owner.Id == content.OwnerId)
+                t.Date <= content.ToDate)
                 .OrderByDescending(t => t.Amount)
                 .Take(5);
 
@@ -160,6 +158,9 @@ namespace WorkerRole
         private CategorySummary[] CreateCategorySummary(CreateReportMessageContent content)
         {
             return transactionsQuery.EntitiesOfUser(db.Transactions, content.OwnerId)
+                .Where(t =>
+                t.Date >= content.FromDate &&
+                t.Date <= content.ToDate)
                 .GroupBy(t => t.Category)
                 .Select(g => new CategorySummary()
                 {
