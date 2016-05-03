@@ -1,11 +1,11 @@
 import ko from 'knockout';
 import 'knockout-validation';
-import reportsTemplate from 'text!./reports.html';
+import reportDetailsTemplate from 'text!./reports.html';
 import moment from 'moment';
 import http from 'app/http';
 import Pikaday from 'pikaday';
 
-class ReportsViewModel {
+class ReportDetailsViewModel {
     constructor() {
 
         // Modal 
@@ -55,7 +55,7 @@ class ReportsViewModel {
 
     fillWithData(data) {
         var reports = data.map(item => {
-            item.CreationDate = moment(item.CreationDate).format('YYYY-MM-DD');
+            item.CreationDate = moment(item.Created).format('YYYY-MM-DD');
             item.FromDate = moment(item.FromDate).format('YYYY-MM-DD');
             item.ToDate = moment(item.ToDate).format('YYYY-MM-DD');
             return item;
@@ -64,4 +64,4 @@ class ReportsViewModel {
     }
 }
 
-export default { viewModel: ReportsViewModel, template: reportsTemplate };
+export default { viewModel: ReportDetailsViewModel, template: reportDetailsTemplate};

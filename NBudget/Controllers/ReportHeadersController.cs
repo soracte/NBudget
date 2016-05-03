@@ -84,7 +84,7 @@ namespace NBudget.Controllers
         [AnotherUserAuthorize]
         public IHttpActionResult PostReportHeader(string userId, [FromBody] NewReportBindingModel model)
         {
-            ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
+            ApplicationUser currentUser = UserManager.FindById(userId);
 
             ReportHeader header = new ReportHeader()
             {
