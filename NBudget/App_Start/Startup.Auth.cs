@@ -11,17 +11,27 @@ using NBudget.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
 
+using System.Data.Entity.Infrastructure; // namespace for the EdmxWriter class
+using System.Xml;
+using System.Text;
+using Microsoft.Owin.Security.Google;
+using Microsoft.Owin.Security.DataHandler;
+using Microsoft.Owin.Security.DataProtection;
+
 namespace NBudget
 {
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
+
         public static string PublicClientId { get; private set; }
 
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+
+
             // Configure the db context and user manager to use a single instance per request
             app.CreatePerOwinContext(NBudgetContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
@@ -41,8 +51,7 @@ namespace NBudget
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // In production mode set AllowInsecureHttp = false
-                AllowInsecureHttp = true
-
+                AllowInsecureHttp = true,
             };
 
             // Enable the application to use bearer tokens to authenticate users
@@ -77,11 +86,11 @@ namespace NBudget
             app.UseFacebookAuthentication(facebookOptions);
 
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "707589178868-fuiqn2ci0403bf6in9p1bvek1dnfe9ja.apps.googleusercontent.com",
+                ClientSecret = "oJ0jEh8otV-dqvSCKTyqKYdZ"
+            });
         }
     }
 }

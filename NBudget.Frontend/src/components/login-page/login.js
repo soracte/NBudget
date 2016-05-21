@@ -10,6 +10,7 @@ class LoginViewModel {
         this.password = ko.observable();
         this.self = this;
         this.facebookLoginUrl = auth.facebookLoginUrl; 
+        this.googleLoginUrl = auth.googleLoginUrl; 
 
         this.regSuccess = params.regSuccess;
     }

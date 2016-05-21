@@ -40,6 +40,17 @@ namespace NBudget.Controllers
 
             ApplicationUser appUser = UserManager.FindById(User.Identity.GetUserId());
 
+            bool hasLocalEmail = false;
+
+            if (appUser == null)
+            {
+                appUser = UserManager.FindByEmail(externalLogin.UserName);
+                if (appUser != null)
+                {
+                    hasLocalEmail = true;
+                }
+            }
+
             return new UserInfoViewModel
             {
                 Id = User.Identity.GetUserId(),
@@ -49,6 +60,7 @@ namespace NBudget.Controllers
                 Invitees = appUser?.Invitees.Select(inv => new UserNameInfo() { Id = inv.Id, FirstName = inv.FirstName, LastName = inv.LastName }),
                 Inviters = appUser?.Inviters.Select(inv => new UserNameInfo() { Id = inv.Id, FirstName = inv.FirstName, LastName = inv.LastName }), 
                 HasRegistered = externalLogin == null,
+                HasLocalEmail = hasLocalEmail,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
         }
@@ -142,33 +154,30 @@ namespace NBudget.Controllers
 
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
-        public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        public async Task<IHttpActionResult> AddExternalLogin()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-
-            AuthenticationTicket ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
-
-            if (ticket == null || ticket.Identity == null || (ticket.Properties != null
-                && ticket.Properties.ExpiresUtc.HasValue
-                && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
-            {
-                return BadRequest("External login failure.");
-            }
-
-            ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
-
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            /*
             if (externalData == null)
             {
                 return BadRequest("The external login is already associated with an account.");
             }
 
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
-                new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
+            */
+            ApplicationUser user = UserManager.FindByEmail(externalLogin.UserName);
+            IdentityResult result = await UserManager.AddLoginAsync(user.Id,
+                new UserLoginInfo(externalLogin.LoginProvider, externalLogin.ProviderKey));
+
+//            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+ //               externalLogin.ProviderKey));
+
+            bool hasRegistered = user != null;
 
             if (!result.Succeeded)
             {

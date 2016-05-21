@@ -6,6 +6,7 @@ class Auth {
         this.authenticated = ko.observable(false);
         this.principal = ko.observable();
         this.facebookLoginUrl = ko.observable();
+        this.googleLoginUrl = ko.observable();
         this.inviters = ko.observableArray();
         this.currentUserId = ko.observable();
         this.currentUserFirstName = ko.observable();
@@ -55,6 +56,10 @@ class Auth {
             var facebookLogin = data.find(login => login.Name === 'Facebook')
             if (facebookLogin) {
                 this.facebookLoginUrl('http://localhost:55880' + facebookLogin.Url);
+            }
+            var googleLogin = data.find(login => login.Name === 'Google')
+            if (googleLogin) {
+                this.googleLoginUrl('http://localhost:55880' + googleLogin.Url);
             }
         })
     }

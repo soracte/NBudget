@@ -314,6 +314,7 @@
       <DependentUpon>201604301402252_AddReportHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\InvitationBindingModels.cs" />
     <Compile Include="Models\UsersBindingModels.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

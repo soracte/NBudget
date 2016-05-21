@@ -8,19 +8,34 @@ class ExternalLoginViewModel {
         var token = this.getAccessToken(params);
         var tokenHeader = {'Authorization': 'Bearer ' + token};
 
+        var loginProviderUrls = {
+            'Facebook': auth.facebookLoginUrl,
+            'Google': auth.googleLoginUrl
+        }
+
         $.ajax({
             url: "http://localhost:55880/api/Account/UserInfo",
             headers: tokenHeader
         }).done(data => {
+            var loginProviderName = data.LoginProvider;
             if (data.HasRegistered === true) {
                 sessionStorage.setItem('token', token);
                 auth.authenticate(() => hasher.setHash(''));
             } else {
-                $.ajax({
-                    url: "http://localhost:55880/api/Account/RegisterExternal",
-                    method: "POST",
-                    headers: tokenHeader
-                }).done(data => window.location = auth.facebookLoginUrl());
+                if (data.HasLocalEmail === true) {
+                    $.ajax({
+                        url: "http://localhost:55880/api/Account/AddExternalLogin",
+                        method: "POST",
+                        headers: tokenHeader
+                    }).done(data => window.location = loginProviderUrls[loginProviderName]());
+                }
+                else {
+                    $.ajax({
+                        url: "http://localhost:55880/api/Account/RegisterExternal",
+                        method: "POST",
+                        headers: tokenHeader
+                    }).done(data => window.location = loginProviderUrls[loginProviderName]());
+                }
             } 
         });
     }

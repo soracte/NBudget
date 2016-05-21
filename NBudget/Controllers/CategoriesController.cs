@@ -30,6 +30,7 @@ namespace NBudget.Controllers
         // GET: api/Categories/5
         [ResponseType(typeof(Category))]
         [Route("{userId}/{id}")]
+        [AnotherUserAuthorize]
         public IHttpActionResult GetCategory(string userId, int id)
         {
             Category category = cats.EntitiesOfUser(db.Categories, userId).SingleOrDefault(cat => cat.Id == id);

@@ -40,6 +40,8 @@ namespace NBudget.Models
 
         public bool HasRegistered { get; set; }
 
+        public bool HasLocalEmail { get; set; }
+
         public string LoginProvider { get; set; }
     }
 
