@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure;
 
 namespace NBudget.Models
 {
@@ -13,6 +15,7 @@ namespace NBudget.Models
 
         public NBudgetContext() : base("name=NBudgetContext")
         {
+            System.Console.WriteLine("Paramless NBudgetContext ctor invoked.");
         }
 
         public NBudgetContext(string connString) : base(connString)
@@ -21,7 +24,7 @@ namespace NBudget.Models
 
         public static NBudgetContext Create()
         {
-            return new NBudgetContext();
+            return new NBudgetContext("Server=tcp:nbsqldb.database.windows.net,1433;Data Source=nbsqldb.database.windows.net;Initial Catalog=nbudgetsqldb;Persist Security Info=False;User ID=nbudget;Password=AlmaKorte91;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
         public System.Data.Entity.DbSet<Transaction> Transactions { get; set; }

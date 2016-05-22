@@ -16,7 +16,7 @@ class LoginViewModel {
     }
 
     login() {
-        $.post("http://localhost:55880/Token",
+        $.post("http://nbudgetcloudservice.cloudapp.net:8080/Token",
                   { grant_type: 'password', username: this.email(), password: this.password() }
                   )
               .done(function (data) {

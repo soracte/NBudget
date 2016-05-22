@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using NBudget.Controllers.ApiControllers;
 using System;
 using System.Net.Mail;
+using System.Net;
 
 namespace NBudget.Controllers
 {
@@ -121,14 +122,18 @@ namespace NBudget.Controllers
 
         private void NotifyRecipientByEmail(string recipientEmail, string ownerName)
         {
-            SmtpClient smtpClient = new SmtpClient("localhost", 25);
-
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential("nbudgetapp@gmail.com", "AlmaKorte91");
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress("nbudget@example.com", "NBudget");
+            mail.From = new MailAddress("nbudgetapp@gmail.com", "NBudget");
             mail.To.Add(new MailAddress(recipientEmail));
-            mail.Body = "You've been invited to edit " + ownerName + "'s budget. Please register or log in to NBudget to accept the invitation.";
+            mail.Subject = "NBudget invitation";
+            mail.Body = "You've been invited to edit " + ownerName + "'s budget. Please register or log in to NBudget at http://nbudget.azurewebsites.net to accept the invitation.";
 
             smtpClient.Send(mail);
         }

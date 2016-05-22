@@ -14,6 +14,7 @@ ko.components.register('external-login', { require: 'components/external-login/e
 ko.components.register('invitations', { require: 'components/invitations/invitations' });
 ko.components.register('reports', { require: 'components/reports/reports' });
 ko.components.register('report-details', { require: 'components/report-details/report-details' });
+ko.components.register('categories-page', { require: 'components/categories-page/categories' });
 
 // ... or for template-only components, you can just point to a .html file directly:
 ko.components.register('about-page', {

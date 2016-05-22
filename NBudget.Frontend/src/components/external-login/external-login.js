@@ -14,7 +14,7 @@ class ExternalLoginViewModel {
         }
 
         $.ajax({
-            url: "http://localhost:55880/api/Account/UserInfo",
+            url: "http://nbudgetcloudservice.cloudapp.net:8080/api/Account/UserInfo",
             headers: tokenHeader
         }).done(data => {
             var loginProviderName = data.LoginProvider;
@@ -24,14 +24,14 @@ class ExternalLoginViewModel {
             } else {
                 if (data.HasLocalEmail === true) {
                     $.ajax({
-                        url: "http://localhost:55880/api/Account/AddExternalLogin",
+                        url: "http://nbudgetcloudservice.cloudapp.net:8080/api/Account/AddExternalLogin",
                         method: "POST",
                         headers: tokenHeader
                     }).done(data => window.location = loginProviderUrls[loginProviderName]());
                 }
                 else {
                     $.ajax({
-                        url: "http://localhost:55880/api/Account/RegisterExternal",
+                        url: "http://nbudgetcloudservice.cloudapp.net:8080/api/Account/RegisterExternal",
                         method: "POST",
                         headers: tokenHeader
                     }).done(data => window.location = loginProviderUrls[loginProviderName]());

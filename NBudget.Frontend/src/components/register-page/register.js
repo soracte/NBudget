@@ -41,7 +41,7 @@ class RegisterViewModel {
         }
 
         $.ajax({
-            url: "http://localhost:55880/api/Account/Register", 
+            url: "http://nbudgetcloudservice.cloudapp.net:8080/api/Account/Register", 
             data:  {
                 Email: this.email(),
                 Password: this.password(),

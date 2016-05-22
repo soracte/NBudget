@@ -46,7 +46,8 @@ var routerInstance = new Router({
         { url: 'access_token={token}',     params: { page: 'external-login'  } },
         { url: 'invitations',     params: { page: 'invitations'  } },
         { url: 'reports',     params: { page: 'reports'  } },
-        { url: 'reports/{reportId}',     params: { page: 'report-details'  } }
+        { url: 'reports/{reportId}',     params: { page: 'report-details'  } },
+        { url: 'categories',     params: { page: 'categories-page'  } }
     ]
 });
 

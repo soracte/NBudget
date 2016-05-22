@@ -16,6 +16,7 @@ using System.Data.Entity;
 using System.Linq;
 using NBudget.Persistence;
 using NBudgetCommon.Factory;
+using Microsoft.Azure;
 
 namespace WorkerRole
 {

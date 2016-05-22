@@ -1,0 +1,20 @@
+<h2>Categories</h2>
+
+<form class="form form-inline" data-bind="submit: addNewCategory" style="">
+    <h4>Add new category</h4>
+    <div class="form-group">
+        <input type="text" class="form-control" data-bind="textInput: catName" placeholder="Category name" />
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Create" />
+</form>
+
+<h4>Existing categories</h4>
+<div id="loadingLabel" data-bind="visible: loading">Loading data...</div>
+<table class="table">
+    <tbody data-bind="foreach: gridData">
+        <tr>
+            <td data-bind="text: Name"></td>
+        </tr>
+    </tbody>
+</table>

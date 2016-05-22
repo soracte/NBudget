@@ -6,7 +6,7 @@ namespace NBudget.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(NBudget.Models.NBudgetContext context)

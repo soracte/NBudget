@@ -21,7 +21,7 @@ class Auth {
         }
 
         $.ajax({
-            url: "http://localhost:55880/api/Account/UserInfo",
+            url: "http://nbudgetcloudservice.cloudapp.net:8080/api/Account/UserInfo",
             headers: { 'Authorization' : 'Bearer ' + sessionStorage.getItem('token')}
         })
         .done(data => {
@@ -51,15 +51,15 @@ class Auth {
     }
 
     loadExternalAuthenticationOptions() {
-        $.get("http://localhost:55880/api/Account/ExternalLogins?returnUrl=http://localhost:8080&generateState=true")
+        $.get("http://nbudgetcloudservice.cloudapp.net:8080/api/Account/ExternalLogins?returnUrl=http://localhost:8080&generateState=true")
         .done(data => {
             var facebookLogin = data.find(login => login.Name === 'Facebook')
             if (facebookLogin) {
-                this.facebookLoginUrl('http://localhost:55880' + facebookLogin.Url);
+                this.facebookLoginUrl('http://nbudgetcloudservice.cloudapp.net:8080' + facebookLogin.Url);
             }
             var googleLogin = data.find(login => login.Name === 'Google')
             if (googleLogin) {
-                this.googleLoginUrl('http://localhost:55880' + googleLogin.Url);
+                this.googleLoginUrl('http://nbudgetcloudservice.cloudapp.net:8080' + googleLogin.Url);
             }
         })
     }

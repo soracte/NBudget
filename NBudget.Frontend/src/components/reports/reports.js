@@ -3,6 +3,7 @@ import 'knockout-validation';
 import reportDetailsTemplate from 'text!./reports.html';
 import moment from 'moment';
 import http from 'app/http';
+import auth from 'app/auth';
 import Pikaday from 'pikaday';
 
 class ReportDetailsViewModel {
@@ -32,7 +33,12 @@ class ReportDetailsViewModel {
 
 
 
-        this.reloadGrid();
+        if (auth.authenticated()) {
+            this.reloadGrid();
+        }
+        else {
+            auth.authenticated.subscribe((val) => { this.reloadGrid(); });
+        }
     }
     
     addNewReport() {
@@ -41,13 +47,13 @@ class ReportDetailsViewModel {
             ToDate: this.toDate()
         }
 
-        http.post("http://localhost:55880/api/ReportHeaders", addedReport, result => this.reloadGrid());
+        http.post("http://nbudgetcloudservice.cloudapp.net:8080/api/ReportHeaders", addedReport, result => this.reloadGrid());
     }
 
     reloadGrid() {
         this.loading(true);
 
-        http.get("http://localhost:55880/api/ReportHeaders", reports => {
+        http.get("http://nbudgetcloudservice.cloudapp.net:8080/api/ReportHeaders", reports => {
             this.fillWithData(reports);
             this.loading(false);
         });

@@ -3,6 +3,7 @@ import 'knockout-validation';
 import invTemplate from 'text!./invitations.html';
 import moment from 'moment';
 import http from 'app/http';
+import auth from 'app/auth';
 
 class InvitationsViewModel {
     constructor() {
@@ -22,7 +23,12 @@ class InvitationsViewModel {
         // Grid data
         this.gridData = ko.observableArray();
 
-        this.reloadGrid();
+        if (auth.authenticated()) {
+            this.reloadGrid();
+        }
+        else {
+            auth.authenticated.subscribe((val) => { this.reloadGrid(); });
+        }
     }
     
     addNewInvitation() {
@@ -31,7 +37,7 @@ class InvitationsViewModel {
         }
 
         $.ajax({
-            url: 'http://localhost:55880/api/Invitations',
+            url: 'http://nbudgetcloudservice.cloudapp.net:8080/api/Invitations',
             method: 'POST',
             headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token')},
             data: {
@@ -43,7 +49,7 @@ class InvitationsViewModel {
 
     deleteInvitation(item) {
         $.ajax({
-            url: 'http://localhost:55880/api/Invitations/' + item.Id,
+            url: 'http://nbudgetcloudservice.cloudapp.net:8080/api/Invitations/' + item.Id,
             method: 'PUT',
             headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token')}}
             )
@@ -54,7 +60,7 @@ class InvitationsViewModel {
         this.loading(true);
 
         $.ajax({
-            url: 'http://localhost:55880/api/Invitations',
+            url: 'http://nbudgetcloudservice.cloudapp.net:8080/api/Invitations',
             method: 'GET',
             headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token')}
         }).done(invs => {

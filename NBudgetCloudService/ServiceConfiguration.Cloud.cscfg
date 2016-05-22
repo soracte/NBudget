@@ -4,14 +4,29 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetcloudservice;AccountKey=EOPwSftLvsbf3akLTfsATLi2dEAZTh639c4ea83jsFMtmwtV57pJaDan0UrY2Eku4RRZ7so/qIkgPGTWxbIrsA==" />
-      <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=NBudgetContext-20151015005101; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|NBudgetContext-20151015005101.mdf" />
-      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetstorage;AccountKey=j6JUpfDbdh099iShN1xw+x/FEejEFAoeh0YuXI7pvDO/emoOqlQ0Y0hzXP7fxpIkYNUoFl28r/Dyd7viWIKDHg==" />
+      <Setting name="NBudgetContextConnectionString" value="Server=tcp:nbsqldb.database.windows.net,1433;Data Source=nbsqldb.database.windows.net;Initial Catalog=nbudgetsqldb;Persist Security Info=False;User ID=nbudget;Password=AlmaKorte91;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="admin" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEDJXU4CAgDeLSFDkuMXFxOwwDQYJKoZIhvcNAQEBBQAEggEADhB4z/puc4A383DQvKgrIZeXCu2p0vazHBqgpDChwrchxT3tcqazIlIvs6/IcrT/9VHaEWPHg7cZ+9pNw3QNuG34X/igGJZkQupGD75cRMT9ABtrbS+2EUGX3NBIN1wQ7jSZ2cad4ZEtjlh7/qvSSmr/XAWUxwHH4AB4tE4npmkh7L/xSK6fj2eRW3uz9Wtk1ummFJ58F5brmlkuoS/b3n42yHsI0FoytVNyRPUc0pklfedPxfvVIA7LefM56smXQF068HfihkdGcCe2m4d1ATnoKpSC0rm1asv3TCUkuzaXN3oxAl/UVQv2VSI9AoDq/Svk+Uyg/uxuIUEIsXo5gDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECNyKCLgS5LdVgBABOF1zWOi98VO28rw6MWcZ" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-05-22T23:59:59.0000000+02:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="8F8B0903B495887688C4C51E38208641270C6B66" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
   <Role name="NBudget">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetcloudservice;AccountKey=EOPwSftLvsbf3akLTfsATLi2dEAZTh639c4ea83jsFMtmwtV57pJaDan0UrY2Eku4RRZ7so/qIkgPGTWxbIrsA==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="admin" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEDJXU4CAgDeLSFDkuMXFxOwwDQYJKoZIhvcNAQEBBQAEggEADhB4z/puc4A383DQvKgrIZeXCu2p0vazHBqgpDChwrchxT3tcqazIlIvs6/IcrT/9VHaEWPHg7cZ+9pNw3QNuG34X/igGJZkQupGD75cRMT9ABtrbS+2EUGX3NBIN1wQ7jSZ2cad4ZEtjlh7/qvSSmr/XAWUxwHH4AB4tE4npmkh7L/xSK6fj2eRW3uz9Wtk1ummFJ58F5brmlkuoS/b3n42yHsI0FoytVNyRPUc0pklfedPxfvVIA7LefM56smXQF068HfihkdGcCe2m4d1ATnoKpSC0rm1asv3TCUkuzaXN3oxAl/UVQv2VSI9AoDq/Svk+Uyg/uxuIUEIsXo5gDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECNyKCLgS5LdVgBABOF1zWOi98VO28rw6MWcZ" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-05-22T23:59:59.0000000+02:00" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="8F8B0903B495887688C4C51E38208641270C6B66" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
 </ServiceConfiguration>

@@ -21,6 +21,12 @@ attributes on the <li> elements.
                     <a href="#tlist" data-bind="visible: authenticated()">Transaction list</a>
                 </li>
 
+                <li data-bind="css: { active: route().page === 'categories' }">
+                    <a href="#categories" data-bind="visible: authenticated()">Categories</a>
+                </li>
+
+
+
                 <li data-bind="css: { active: route().page === 'reports' }">
                     <a href="#reports" data-bind="visible: authenticated()">Reports</a>
                 </li>

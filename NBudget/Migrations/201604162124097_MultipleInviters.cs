@@ -20,7 +20,7 @@ namespace NBudget.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id1)
                 .Index(t => t.ApplicationUser_Id)
                 .Index(t => t.ApplicationUser_Id1);
-            
+            DropForeignKey("dbo.AspNetUsers", "ApplicationUser_Id", "dbo.AspNetUsers", "Id");
             DropColumn("dbo.AspNetUsers", "Inviter_Id");
         }
         

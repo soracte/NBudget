@@ -4,6 +4,7 @@ import tlistTemplate from 'text!./tlist.html';
 import moment from 'moment';
 import Pikaday from 'pikaday';
 import http from 'app/http';
+import auth from 'app/auth';
 
 class Transaction {
     constructor(date, amount, reason, categoryId) {
@@ -24,8 +25,7 @@ class Category {
 class TransactionListViewModel {
     constructor(route) {
         this.message = ko.observable('Welcome to NBudget!');
-
-        // KO config
+               // KO config
         ko.validation.init({
             decorateInputElement: true,
             registerExtenders: true,
@@ -55,18 +55,22 @@ class TransactionListViewModel {
 
         // Validation
         this.errors= ko.validation.group(this, { deep: true });
-        this.reloadGrid();
         var picker = new Pikaday({
             field: document.getElementById("datepicker"),
             firstDay: 1,
             format: 'YYYY-MM-DD'
         });
+
+        if (auth.authenticated()) {
+            this.reloadGrid();
+        }
+        else {
+            auth.authenticated.subscribe((val) => { this.reloadGrid(); });
+        }
+
+
     }
     
-    doSomething() {
-        this.message('You invoked doSomething() on the viewmodel.');
-    }
-
     addNewTransaction(formElement) {
         if (this.errors().length > 0) {
             this.errors.showAllMessages(true);
@@ -75,7 +79,7 @@ class TransactionListViewModel {
 
         var addedTransaction = new Transaction(this.date(), this.amount(), this.reason(), this.category().id());
 
-        http.post("http://localhost:55880/api/Transactions/", addedTransaction, result => {
+        http.post("http://nbudgetcloudservice.cloudapp.net:8080/api/Transactions/", addedTransaction, result => {
             this.reloadGrid();
             this.resetVm();
             $('#newTransactionModal').modal('hide');
@@ -86,8 +90,8 @@ class TransactionListViewModel {
         var categories = [];
         this.loading(true);
 
-        http.get("http://localhost:55880/api/Categories", cats => {
-            var path = "http://localhost:55880/api/Transactions" + ('?' + $.param({ catid: this.checkedCategories() }, true) || '');
+        http.get("http://nbudgetcloudservice.cloudapp.net:8080/api/Categories", cats => {
+            var path = "http://nbudgetcloudservice.cloudapp.net:8080/api/Transactions" + ('?' + $.param({ cats: this.checkedCategories() }, true) || '');
             http.get(path, data => {
                 this.fillWithData(data, cats);
                 this.loading(false);

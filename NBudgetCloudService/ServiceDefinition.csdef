@@ -6,6 +6,10 @@
       <Setting name="NBudgetContextConnectionString" />
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
   </WorkerRole>
   <WebRole name="NBudget" vmsize="Small">
     <Sites>
@@ -21,5 +25,8 @@
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+    </Imports>
   </WebRole>
 </ServiceDefinition>
