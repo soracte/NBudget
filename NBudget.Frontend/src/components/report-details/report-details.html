@@ -1,0 +1,40 @@
+<h2>Report details</h2>
+
+<div id="loadingLabel" data-bind="visible: loading">Loading data...</div>
+<div><strong>Creation date: </strong><span data-bind="text: creationDate" /></div>
+<div><strong>From date: </strong><span data-bind="text: fromDate" /></div>
+<div><strong>To date: </strong><span data-bind="text: toDate" /></div>
+
+<h4>Top transactions</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: topTransactions">
+        <tr>
+            <td data-bind="text: Amount"></td>
+            <td data-bind="text: Reason"></td>
+            <td data-bind="text: CategoryName"></td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Category summary</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: categorySummary">
+        <tr>
+            <td data-bind="text: CategoryName"></td>
+            <td data-bind="text: Sum"></td>
+        </tr>
+    </tbody>
+</table>
