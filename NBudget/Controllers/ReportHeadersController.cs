@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using NBudget.Attributes;
@@ -97,7 +98,7 @@ namespace NBudget.Controllers
             db.ReportHeaders.Add(header);
             db.SaveChanges();
 
-            var storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
+            var storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=nbudgetstorage;AccountKey=j6JUpfDbdh099iShN1xw+x/FEejEFAoeh0YuXI7pvDO/emoOqlQ0Y0hzXP7fxpIkYNUoFl28r/Dyd7viWIKDHg==");
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             CloudQueue reportQueue = queueClient.GetQueueReference("reports");
 

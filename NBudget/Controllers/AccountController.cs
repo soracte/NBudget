@@ -50,6 +50,10 @@ namespace NBudget.Controllers
                     hasLocalEmail = true;
                 }
             }
+            if (externalLogin == null)
+            {
+                UpdateInvitationStatusForNewUser(appUser.Email);
+            }
 
             return new UserInfoViewModel
             {
@@ -262,6 +266,7 @@ namespace NBudget.Controllers
 
                 AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+
             }
             else
             {
@@ -376,7 +381,6 @@ namespace NBudget.Controllers
                 return GetErrorResult(result); 
             }
 
-            UpdateInvitationStatusForNewUser(externalLogin.UserName);
             return Ok();
         }
 
@@ -413,7 +417,10 @@ namespace NBudget.Controllers
                 {
                     Console.WriteLine(e.EntityValidationErrors.ToString());
                 }
+
+            ProcessInviteeRelationship(pendingInvitationForUser);
             }
+
         }
 
 

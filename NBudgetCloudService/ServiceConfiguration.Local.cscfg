@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="NBudgetContextConnectionString" value="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NBudgetContext-20151015005101;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"  />
-      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nbudgetstorage;AccountKey=j6JUpfDbdh099iShN1xw+x/FEejEFAoeh0YuXI7pvDO/emoOqlQ0Y0hzXP7fxpIkYNUoFl28r/Dyd7viWIKDHg==" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="admin" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEDJXU4CAgDeLSFDkuMXFxOwwDQYJKoZIhvcNAQEBBQAEggEADhB4z/puc4A383DQvKgrIZeXCu2p0vazHBqgpDChwrchxT3tcqazIlIvs6/IcrT/9VHaEWPHg7cZ+9pNw3QNuG34X/igGJZkQupGD75cRMT9ABtrbS+2EUGX3NBIN1wQ7jSZ2cad4ZEtjlh7/qvSSmr/XAWUxwHH4AB4tE4npmkh7L/xSK6fj2eRW3uz9Wtk1ummFJ58F5brmlkuoS/b3n42yHsI0FoytVNyRPUc0pklfedPxfvVIA7LefM56smXQF068HfihkdGcCe2m4d1ATnoKpSC0rm1asv3TCUkuzaXN3oxAl/UVQv2VSI9AoDq/Svk+Uyg/uxuIUEIsXo5gDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECNyKCLgS5LdVgBABOF1zWOi98VO28rw6MWcZ" />

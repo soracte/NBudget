@@ -56,10 +56,9 @@ namespace WorkerRole
 
             bool result = base.OnStart();
 
-            var dbConnString = CloudConfigurationManager.GetSetting("NBudgetContextConnectionString");
-            db = new NBudgetContext(dbConnString);
+            db = NBudgetContext.Create(); 
 
-            var storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=nbudgetstorage;AccountKey=j6JUpfDbdh099iShN1xw+x/FEejEFAoeh0YuXI7pvDO/emoOqlQ0Y0hzXP7fxpIkYNUoFl28r/Dyd7viWIKDHg==");
 
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             reportQueue = queueClient.GetQueueReference("reports");
@@ -145,7 +144,7 @@ namespace WorkerRole
                 .Where(t =>
                 t.Date >= content.FromDate &&
                 t.Date <= content.ToDate)
-                .OrderByDescending(t => t.Amount)
+                .OrderByDescending(t => Math.Abs(t.Amount))
                 .Take(5);
 
             return top.Select(t => new TransactionInfo()
@@ -153,7 +152,9 @@ namespace WorkerRole
                 Amount = t.Amount,
                 CategoryName = t.Category.Name,
                 Reason = t.Reason
-            }).ToArray();
+            })
+            .OrderByDescending(t => Math.Abs(t.Amount))
+            .ToArray();
         }
 
         private CategorySummary[] CreateCategorySummary(CreateReportMessageContent content)

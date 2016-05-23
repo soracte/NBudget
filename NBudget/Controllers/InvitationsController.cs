@@ -8,6 +8,8 @@ using NBudget.Controllers.ApiControllers;
 using System;
 using System.Net.Mail;
 using System.Net;
+using SendGrid;
+using System.Threading.Tasks;
 
 namespace NBudget.Controllers
 {
@@ -92,50 +94,22 @@ namespace NBudget.Controllers
             return (invitation != null && invitation.Sender.Id == User.Identity.GetUserId());
         }
 
-        private void ProcessInviteeRelationship(Invitation invitation)
+        
+
+        private async Task NotifyRecipientByEmail(string recipientEmail, string ownerName)
         {
-            ApplicationUser recipientUser = UserManager.FindByEmail(invitation.RecipientEmail);
-            if (recipientUser == null)
-            {
-                return;
-            }
+            // Create the email object first, then add the properties.
+            var message = new SendGridMessage();
 
-            ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
+            // Add the message properties.
+            message.From = new MailAddress("info@nbudget.com");
+            message.To = new MailAddress[] { new MailAddress(recipientEmail) };
+            message.Subject = "NBudget invitation";
+            message.Text = "You've been invited to edit " + ownerName + "'s budget. Please register or log in to NBudget at http://nbudget.azurewebsites.net to accept the invitation.";
 
-            if (invitation.Status == InvitationStatus.Pending)
-            {
-                recipientUser.Inviters.Add(currentUser);
-                currentUser.Invitees.Add(recipientUser);
-                invitation.Status = InvitationStatus.Active;
-            }
-
-            else if (invitation.Status == InvitationStatus.Active)
-            {
-                recipientUser.Inviters.Remove(currentUser);
-                currentUser.Invitees.Remove(recipientUser);
-                invitation.Status = InvitationStatus.Inactive;
-            }
-
-            UserManager.Update(recipientUser);
-            UserManager.Update(currentUser);
-        }
-
-        private void NotifyRecipientByEmail(string recipientEmail, string ownerName)
-        {
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("nbudgetapp@gmail.com", "AlmaKorte91");
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-            MailMessage mail = new MailMessage();
-
-            mail.From = new MailAddress("nbudgetapp@gmail.com", "NBudget");
-            mail.To.Add(new MailAddress(recipientEmail));
-            mail.Subject = "NBudget invitation";
-            mail.Body = "You've been invited to edit " + ownerName + "'s budget. Please register or log in to NBudget at http://nbudget.azurewebsites.net to accept the invitation.";
-
-            smtpClient.Send(mail);
+            var credentials = new NetworkCredential("azure_d53d802de84c56249d05133a8c55abf4@azure.com", "AlmaKorte91");
+            var transportWeb = new Web(credentials);
+            transportWeb.DeliverAsync(message);
         }
 
         protected override void Dispose(bool disposing)

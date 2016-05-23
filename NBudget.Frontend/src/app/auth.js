@@ -51,7 +51,7 @@ class Auth {
     }
 
     loadExternalAuthenticationOptions() {
-        $.get("http://nbudgetcloudservice.cloudapp.net:8080/api/Account/ExternalLogins?returnUrl=http://localhost:8080&generateState=true")
+        $.get("http://nbudgetcloudservice.cloudapp.net:8080/api/Account/ExternalLogins?returnUrl=http://nbudget.azurewebsites.net&generateState=true")
         .done(data => {
             var facebookLogin = data.find(login => login.Name === 'Facebook')
             if (facebookLogin) {

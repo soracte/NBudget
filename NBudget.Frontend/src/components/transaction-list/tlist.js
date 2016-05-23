@@ -39,6 +39,7 @@ class TransactionListViewModel {
         this.amount = ko.observable().extend({ required: true, number: true });
         this.reason = ko.observable().extend({ required: true, maxLength: 20 });
         this.category = ko.observable().extend({ required: true });
+        this.mode = ko.observable('income');
 
         // Loading state
         this.loading = ko.observable(false);
@@ -70,6 +71,14 @@ class TransactionListViewModel {
 
 
     }
+
+    toIncome() {
+        this.mode('income');
+    }
+
+    toExpense() {
+        this.mode('expense');
+    }
     
     addNewTransaction(formElement) {
         if (this.errors().length > 0) {
@@ -77,7 +86,11 @@ class TransactionListViewModel {
             return false;
         }
 
-        var addedTransaction = new Transaction(this.date(), this.amount(), this.reason(), this.category().id());
+        var amount = this.amount();
+        if (this.mode() == 'expense') {
+            amount = -amount;
+        }
+        var addedTransaction = new Transaction(this.date(), amount, this.reason(), this.category().id());
 
         http.post("http://nbudgetcloudservice.cloudapp.net:8080/api/Transactions/", addedTransaction, result => {
             this.reloadGrid();
