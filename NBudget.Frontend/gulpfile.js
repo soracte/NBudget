@@ -20,6 +20,7 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require
             'components/nav-bar/nav-bar',
             'components/home-page/home',
             'components/transaction-list/tlist',
+            'components/categories-page/categories',
             'components/login-page/login',
             'components/register-page/register',
             'components/external-login/external-login',
@@ -85,7 +86,8 @@ gulp.task('css', function () {
     var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
         appCss = gulp.src('src/css/*.css'),
-        combinedCss = es.concat(bowerCss, appCss).pipe(concat('css.css')),
+        pikadayCss = gulp.src('src/bower_modules/pikaday/css/pikaday.css'),
+        combinedCss = es.concat(pikadayCss, bowerCss, appCss).pipe(concat('css.css')),
         fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', { base: './src/bower_modules/components-bootstrap/' });
     return es.concat(combinedCss, fontFiles)
         .pipe(gulp.dest('./dist/'));
